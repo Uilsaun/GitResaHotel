@@ -1,0 +1,116 @@
+<!-- views/chambres/create.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <div class="ui inverted menu"
+        style="margin: 0; border-radius: 0; background: rgba(26, 26, 46, 0.95); position: fixed; width: 100%; z-index: 1000; backdrop-filter: blur(10px);">
+        <div class="ui container">
+            <a href="/" class="header item" style="font-size: 1.3rem; font-weight: 300;">
+                ✨ Hôtel California
+            </a>
+            <a href="/" class="item">Accueil</a>
+            <a href="/chambres" class="item active">Gérer les chambres</a>
+            <a class="item">Services</a>
+            <a class="item">Contact</a>
+        </div>
+    </div>
+
+    <div class="ui container" style="margin-top: 100px; margin-bottom: 50px;">
+        <div class="ui breadcrumb">
+            <a href="/" class="section">Accueil</a>
+            <div class="divider"> / </div>
+            <a href="/chambres" class="section">Chambres</a>
+            <div class="divider"> / </div>
+            <div class="active section">Ajouter</div>
+        </div>
+
+        <h1 class="ui header" style="margin-top: 30px;">
+            <i class="plus circle icon"></i>
+            <div class="content">
+                Ajouter une Chambre
+                <div class="sub header">Créez une nouvelle chambre dans le système</div>
+            </div>
+        </h1>
+
+        <% if (errors && errors.length> 0) { %>
+            <div class="ui negative message">
+                <div class="header">Erreur lors de la création</div>
+                <ul class="list">
+                    <% errors.forEach(error=> { %>
+                        <li>
+                            <%= error.msg %>
+                        </li>
+                        <% }) %>
+                </ul>
+            </div>
+            <% } %>
+
+                <div class="ui segment">
+                    <form class="ui form" action="/chambres/create" method="POST">
+                        <div class="two fields">
+                            <div class="required field">
+                                <label>Numéro de la chambre</label>
+                                <input type="text" name="numero" placeholder="Ex: 101, 202, A12..."
+                                    value="<%= chambre.numero || '' %>" required>
+                                <div class="ui pointing label"
+                                    style="margin-top: 5px; border: none; background: transparent; color: #999; font-size: 0.9em;">
+                                    Le numéro doit être unique
+                                </div>
+                            </div>
+                            <div class="required field">
+                                <label>Capacité</label>
+                                <select class="ui dropdown" name="capacite" required>
+                                    <option value="">Sélectionnez...</option>
+                                    <option value="1" <%=chambre.capacite==1 ? 'selected' : '' %>>1 personne</option>
+                                    <option value="2" <%=chambre.capacite==2 ? 'selected' : '' %>>2 personnes</option>
+                                    <option value="3" <%=chambre.capacite==3 ? 'selected' : '' %>>3 personnes</option>
+                                    <option value="4" <%=chambre.capacite==4 ? 'selected' : '' %>>4 personnes</option>
+                                    <option value="5" <%=chambre.capacite==5 ? 'selected' : '' %>>5 personnes</option>
+                                    <option value="6" <%=chambre.capacite==6 ? 'selected' : '' %>>6 personnes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="ui divider"></div>
+
+                        <div class="field" style="text-align: right;">
+                            <a href="/chambres" class="ui button">
+                                <i class="cancel icon"></i> Annuler
+                            </a>
+                            <button class="ui primary button" type="submit">
+                                <i class="save icon"></i> Créer la chambre
+                            </button>
+                        </div>
+                    </form>
+                </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="ui container">
+            <div style="text-align: center; padding: 20px 0;">
+                <p>© 2025 Hôtel California. Tous droits réservés.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+    <script>
+        $('.ui.dropdown').dropdown();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<!-- views/chambres/index.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <div class="ui inverted menu"
+        style="margin: 0; border-radius: 0; background: rgba(26, 26, 46, 0.95); position: fixed; width: 100%; z-index: 1000; backdrop-filter: blur(10px);">
+        <div class="ui container">
+            <a href="/" class="header item" style="font-size: 1.3rem; font-weight: 300;">
+                ✨ <%= title.split('-')[0].trim() %>
+            </a>
+            <a href="/" class="item">Accueil</a>
+            <a href="/chambres" class="item">Gérer les chambres</a>
+            <a class="item">Services</a>
+            <a class="item">Contact</a>
+            <a href="/clients" class="item">Clients</a>
+            <div class="right menu">
+                <a class="item">
+                    <i class="user icon"></i> Connexion
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bouton vers l'index des clients -->
+    <div style="padding-top:80px; text-align: center;">
+        <a href="/clients" class="ui huge primary button">
+            👥 Gérer les Clients
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section" style="padding-top: 120px; padding-bottom: 50px; background: #f9f9f9;">
+        <div class="ui container">
+            <h1 class="ui header">🏨 Gestion des Chambres</h1>
+
+            <% if (chambres.length===0) { %>
+                <div class="ui message">
+                    <div class="header">Aucune chambre trouvée</div>
+                    <p>Ajoutez une chambre pour commencer.</p>
+                </div>
+                <% } else { %>
+                    <table class="ui celled table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Numéro</th>
+                                <th>Capacité</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% chambres.forEach(chambre=> { %>
+                                <tr>
+                                    <td>
+                                        <%= chambre.id %>
+                                    </td>
+                                    <td>
+                                        <%= chambre.numero %>
+                                    </td>
+                                    <td>
+                                        <%= chambre.capacite %> pers.
+                                    </td>
+                                    <td>
+                                        <a href="/chambres/edit/<%= chambre.id %>"
+                                            class="ui tiny blue button">Modifier</a>
+                                        <a href="/chambres/delete/<%= chambre.id %>"
+                                            class="ui tiny red button">Supprimer</a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } %>
+
+                        <a href="/chambres/create" class="ui primary button" style="margin-top: 20px;">
+                            ➕ Ajouter une chambre
+                        </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer" style="background: #1a1a2e; color: #fff; padding: 50px 0;">
+        <div class="ui container">
+            <div class="ui four column stackable grid">
+                <div class="column">
+                    <h4>À Propos</h4>
+                    <p>Hôtel California, votre destination de luxe pour des séjours inoubliables.</p>
+                </div>
+                <div class="column">
+                    <h4>Liens Rapides</h4>
+                    <div class="ui link list">
+                        <a href="/chambres" class="item">Nos Chambres</a>
+                        <a class="item">Services</a>
+                        <a class="item">Réservation</a>
+                        <a class="item">Contact</a>
+                    </div>
+                </div>
+                <div class="column">
+                    <h4>Contact</h4>
+                    <p>📍 123 Avenue du Luxe, Paris<br>
+                        📞 +33 1 23 45 67 89<br>
+                        📧 contact@hotel-california.fr</p>
+                </div>
+                <div class="column">
+                    <h4>Suivez-nous</h4>
+                    <div class="ui huge icons">
+                        <i class="facebook icon" style="cursor: pointer; margin-right: 15px;"></i>
+                        <i class="instagram icon" style="cursor: pointer; margin-right: 15px;"></i>
+                        <i class="twitter icon" style="cursor: pointer;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider" style="margin-top: 40px;"></div>
+            <div style="text-align: center; padding: 20px 0;">
+                <p>© 2025 Hôtel California. Tous droits réservés.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+    <script>
+        $('.ui.dropdown').dropdown();
+    </script>
+</body>
+
+</html>

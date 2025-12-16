@@ -1,0 +1,51 @@
+<!-- index.ejs de service-->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= title %>
+    </title>
+</head>
+
+<body>
+    <h1>
+        <%= title %>
+    </h1>
+
+    <table border="1" cellpadding="10">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom du service</th>
+                <th>Adresse</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% services.forEach(service=> { %>
+                <tr>
+                    <td>
+                        <%= service.id %>
+                    </td>
+                    <td>
+                        <%= service.name %>
+                    </td>
+                    <td>
+                        <%= service.address || 'Non renseignée' %>
+                    </td>
+                    <td>
+                        <%= service.email || 'Non renseigné' %>
+                    </td>
+                    <td>
+                        <%= service.phone || 'Coming Soon' %>
+                    </td>
+                </tr>
+                <% }) %>
+        </tbody>
+    </table>
+</body>
+
+</html>
