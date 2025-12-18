@@ -1,0 +1,17 @@
+# Dossiers et fichiers Node.js
+node_modules/
+npm-debug.log*
+# Fichiers d'environnement
+.env*
+configDB.ini
+# Fichiers système
+.DS_Store
+Thumbs.db
+# Fichiers temporaires
+*.tmp
+*.bak
+# Configuration IDE
+.vscode/
+.idea/
+*.swp
+*.swo

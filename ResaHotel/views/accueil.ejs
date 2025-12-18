@@ -1,0 +1,143 @@
+<!-- Acceuil  racine views -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/css/styleacceuil.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+
+    <body>
+        <!-- Navigation -->
+        <div class="ui inverted menu"
+            style="margin: 0; border-radius: 0; background: rgba(26, 26, 46, 0.95); position: fixed; width: 100%; z-index: 1000; backdrop-filter: blur(10px);">
+            <div class="ui container">
+                <a href="/" class="header item" style="font-size: 1.3rem; font-weight: 300;">
+                    <%= title.split('-')[0].trim() %>
+                </a>
+                <a href="/" class="item">Accueil</a>
+                <a href="/chambres" class="item">Gérer les chambres</a>
+                <a href="/contact" class="item">Contact</a>
+                <a href="/clients" class="item">Client</a>
+                <div class="right menu">
+                        <a href="/auth" class="item">Connexion</a>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-background"></div>
+            <div class="hero-content">
+                <h1>Bienvenue à l'Hôtel California</h1>
+                <p>Vivez une expérience inoubliable dans le luxe et le confort</p>
+
+                <!-- Booking Card -->
+                <div class="booking-card">
+                    <form class="ui form" action="/chambres" method="GET">
+                        <h2 class="gradient-text" style="margin-bottom: 30px;">Réservez votre séjour</h2>
+                        <div class="fields">
+                            <div class="five wide field">
+                                <label>Arrivée</label>
+                                <input type="date" name="date_arrivee" required>
+                            </div>
+                            <div class="five wide field">
+                                <label>Départ</label>
+                                <input type="date" name="date_depart" required>
+                            </div>
+                            <div class="six wide field">
+                                <label>Personnes</label>
+                                <select class="ui dropdown" name="nb_personnes">
+                                    <option value="1">1 personne</option>
+                                    <option value="2" selected>2 personnes</option>
+                                    <option value="3">3 personnes</option>
+                                    <option value="4">4 personnes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="ui primary huge fluid button" type="submit">
+                            <i class="search icon"></i> Rechercher des chambres
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="ui container">
+                <div class="ui four column stackable grid">
+                    <div class="column">
+                        <h4>À Propos</h4>
+                        <p>Hôtel California, votre destination de luxe pour des séjours inoubliables.</p>
+                    </div>
+                    <div class="column">
+                        <h4>Liens Rapides</h4>
+                        <div class="ui link list">
+                            <a href="chambres" class="item">Nos Chambres</a>
+                            <a href="/service" class="item">Service</a>
+                            <a class="item">Réservation</a>
+                            <a class="item">Contact</a>
+                            <a href="/clients" class="item">Client</a>   
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h4>Contact</h4>
+                        <p>📍 30 r Louise Michel, 38000 Grenoble<br>
+                            📞 04 38 12 36 00<br>
+                            📧 Kwentinsaundev@hotelcalifornia.fr</p>
+                    </div>
+                    <div class="column">
+                        <h4>Suivez-nous</h4>
+                        <div class="ui huge icons">
+                            <a href="https://www.facebook.com/login.php" target="_blank">
+                                <i class="facebook icon" style="cursor: pointer; margin-right: 15px;"></i>
+                            </a>
+                            <a href="https://www.instagram.com">
+                            <i class="instagram icon" style="cursor: pointer; margin-right: 15px;"></i>
+                            </a>
+                            <a href="https://x.com">
+                            <i class="x icon" style="cursor: pointer;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui divider" style="margin-top: 40px;"></div>
+                <div style="text-align: center; padding: 20px 0;">
+                    <p>© 2025 Hôtel California. Tous droits réservés.</p>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+        <script>
+            $('.ui.dropdown').dropdown();
+
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                input.setAttribute('min', today);
+            });
+
+            const arrivalInput = document.querySelector('input[name="date_arrivee"]');
+            const departureInput = document.querySelector('input[name="date_depart"]');
+            if (arrivalInput && departureInput) {
+                arrivalInput.addEventListener('change', function () {
+                    departureInput.setAttribute('min', this.value);
+                    if (departureInput.value && departureInput.value <= this.value) {
+                        departureInput.value = '';
+                    }
+                });
+            }
+        </script>
+    </body>
+
+</html>
