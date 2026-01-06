@@ -13,20 +13,17 @@
 
 <body>
     <!-- Navigation -->
-    <div class="ui inverted menu"
-        style="margin: 0; border-radius: 0; background: rgba(26, 26, 46, 0.95); position: fixed; width: 100%; z-index: 1000; backdrop-filter: blur(10px);">
+    <div class="ui inverted menu navigation-menu">
         <div class="ui container">
-            <a href="/" class="header item" style="font-size: 1.3rem; font-weight: 300;">
-                 <%= title.split('-')[0].trim() %>
+            <a href="/" class="header item">
+                Hôtel California
             </a>
             <a href="/" class="item">Accueil</a>
             <a href="/chambres" class="item">Gérer les chambres</a>
             <a href="/contact" class="item">Contact</a>
-            <a href="/clients" class="item">Clients</a>
+            <a href="/clients" class="item">Client</a>
             <div class="right menu">
-                <a class="item">
-                    <i class="user icon"></i> Connexion
-                </a>
+                <a href="/auth/login" class="item">Connexion</a>
             </div>
         </div>
     </div>
@@ -72,9 +69,9 @@
                                     </td>
                                     <td>
                                         <a href="/chambres/edit/<%= chambre.id %>"
-                                            class="ui tiny blue button">Modifier</a>
+                                            class="item">✎</a>
                                         <a href="/chambres/delete/<%= chambre.id %>"
-                                            class="ui tiny red button">Supprimer</a>
+                                            class="item">🗑</a>
                                     </td>
                                 </tr>
                                 <% }) %>
