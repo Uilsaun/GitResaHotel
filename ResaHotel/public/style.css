@@ -1,0 +1,416 @@
+/* style.css */
+
+body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+
+        .navigation-menu {
+            margin: 0;
+            border-radius: 0;
+            background: rgba(26, 26, 46, 0.95);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .navigation-menu .header.item {
+            font-size: 1.3rem;
+            font-weight: 300;
+        }
+
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-top: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #000000 100%);
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-content > p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-top: 2rem;
+        }
+
+        .booking-card h2 {
+            color: #82e97e;
+            margin-bottom: 30px;
+        }
+
+        .footer {
+            background: #1d1d1d;
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 0;
+        }
+
+        .footer h4 {
+            color: #82e97e;
+            margin-bottom: 20px;
+        }
+
+        .footer .ui.link.list .item {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer .ui.link.list .item:hover {
+            color: #667eea;
+        }
+
+        .footer .divider {
+            margin-top: 40px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .social-icons a {
+            color: white;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #667eea;
+        }
+
+        .social-icons .icon {
+            cursor: pointer;
+        }
+
+        /* ===== LOGIN PAGE STYLES ===== */
+        .login-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-card h2 {
+            color: #000000;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-card .subtitle {
+            color: #999;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .login-form .field {
+            margin-bottom: 20px;
+        }
+
+        .login-form .field label {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .login-form input[type="text"]:focus,
+        .login-form input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-form .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-form .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-form .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .login-footer p {
+            color: #666;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .login-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .login-footer a:hover {
+            color: #764ba2;
+        }
+
+/* ===== CONTACTS PAGE STYLES ===== */
+.contacts-hero {
+    padding-top: 100px;
+    padding-bottom: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #000000 100%);
+    color: #fff;
+    text-align: center;
+}
+
+.contacts-hero h1 {
+    font-size: 2.5rem;
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    text-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.contacts-hero p {
+    margin: 0;
+    opacity: 0.95;
+}
+
+.contacts-container {
+    max-width: 1100px;
+    margin: 30px auto 80px;
+    padding: 0 18px;
+}
+
+.btn-add-contact {
+    display: inline-block;
+    background: linear-gradient(135deg, #82e97e 0%, #667eea 100%);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(102,126,234,0.18);
+}
+
+.contacts-table-container {
+    margin-top: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 12px 30px rgba(16,24,40,0.06);
+}
+
+.contacts-table-container h2 {
+    margin: 0 0 12px 0;
+    color: #333;
+}
+
+.contacts-table-container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.contacts-table-container li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f7f9fc;
+    border-radius: 10px;
+    min-height: 64px;
+}
+
+.contact-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+}
+
+.contacts-table-container strong {
+    display: block;
+    color: #111827;
+}
+
+.contacts-table-container span {
+    display: inline-block;
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-right: 8px;
+}
+
+.action-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.action-buttons a {
+    display: inline-block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #374151;
+    font-weight: 600;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.action-buttons a:hover {
+    background: #667eea;
+    color: #fff;
+}
+
+.empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.empty-state .icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 700px) {
+    .contacts-hero h1 { font-size: 1.8rem; }
+    .contacts-table-container ul { grid-template-columns: 1fr; }
+    .contact-avatar { width: 44px; height: 44px; font-size: 0.95rem; }
+    .btn-add-contact { width: 100%; text-align: center; display: block; }
+}
+
+/* Styles pour le tableau de contacts */
+.contacts-table .contact-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #fff;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+.contacts-table td, .contacts-table th {
+    vertical-align: middle !important;
+}
+.contacts-table .ui.button { margin-right: 6px; }
+
+@media (max-width: 700px) {
+    .contacts-table thead { display: none; }
+    .contacts-table tbody tr { display: block; margin-bottom: 12px; }
+    .contacts-table tbody td { display: flex; justify-content: space-between; padding: 12px; }
+    .contacts-table tbody td:first-child { width: 56px; }
+}

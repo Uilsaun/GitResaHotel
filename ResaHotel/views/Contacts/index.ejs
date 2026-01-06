@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
-    <link rel="stylesheet" href="/css/stylecontact.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <!-- Navigation (même que la page d'accueil) -->
-    <div class="ui inverted menu" style="margin: 0; border-radius: 0; background: rgba(26, 26, 46, 0.95); position: fixed; width: 100%; z-index: 1000; backdrop-filter: blur(10px);">
+    <div class="ui inverted menu navigation-menu">
         <div class="ui container">
-            <a href="/" class="header item" style="font-size: 1.3rem; font-weight: 300;">
+            <a href="/" class="header item">
                  Hôtel California
             </a>
             <a href="/" class="item">Accueil</a>
@@ -43,7 +43,7 @@
         <!-- Table Container -->
         <div class="contacts-table-container">
             <h2>📋 Liste des contacts</h2>
-            
+
             <% if (contacts.length === 0) { %>
                 <div class="empty-state">
                     <div class="icon">📭</div>
@@ -51,22 +51,37 @@
                     <p>Commencez par ajouter votre premier contact</p>
                 </div>
             <% } else { %>
-                <ul>
-                    <% contacts.forEach(c => { %>
-                        <li>
-                            <div class="contact-avatar">
-                                <%= (c.nom_entreprise || c.nom).charAt(0).toUpperCase() %>
-                            </div>
-                            <strong><%= c.nom_entreprise || c.nom %></strong>
-                            <span>📧 <%= c.email %></span>
-                            <span>📞 <%= c.telephone %></span>
-                            <div class="action-buttons">
-                                <a href="/contact/<%= c.id %>/edit">✏️ Modifier</a>
-                                <a href="/contact/<%= c.id %>/delete">🗑️ Supprimer</a>
-                            </div>
-                        </li>
-                    <% }) %>
-                </ul>
+                <table class="ui celled selectable stackable contacts-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Nom / Entreprise</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th style="width:180px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% contacts.forEach(c => { %>
+                            <tr>
+                                <td class="center aligned">
+                                    <div class="contact-avatar">
+                                        <%= (c.nom_entreprise || c.nom).charAt(0).toUpperCase() %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong><%= c.nom_entreprise || c.nom %></strong>
+                                </td>
+                                <td><%= c.email %></td>
+                                <td><%= c.telephone %></td>
+                                <td>
+                                    <a class="ui mini primary button" href="/contact/<%= c.id %>/edit">✏️ Modifier</a>
+                                    <a class="ui mini red button" href="/contact/<%= c.id %>/delete">🗑️ Supprimer</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
             <% } %>
         </div>
     </div>
