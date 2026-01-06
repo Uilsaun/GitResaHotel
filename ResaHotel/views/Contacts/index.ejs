@@ -8,20 +8,18 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <!-- Navigation (même que la page d'accueil) -->
+    <!-- Navigation -->
     <div class="ui inverted menu navigation-menu">
         <div class="ui container">
             <a href="/" class="header item">
-                 Hôtel California
+                Hôtel California
             </a>
             <a href="/" class="item">Accueil</a>
             <a href="/chambres" class="item">Gérer les chambres</a>
-            <a href="/contact" class="item active">Contact</a>
+            <a href="/contact" class="item">Contact</a>
             <a href="/clients" class="item">Client</a>
             <div class="right menu">
-                <a class="item">
-                    <i class="user icon"></i> Connexion
-                </a>
+                <a href="/auth/login" class="item">Connexion</a>
             </div>
         </div>
     </div>
@@ -72,9 +70,9 @@
                                 <td>
                                     <strong><%= c.nom_entreprise || c.nom %></strong>
                                 </td>
-                                <td class="information"><%= c.email %></td>
-                                <td class="information"><%= c.telephone %></td>
-                                <td class="button">
+                                <td><%= c.email %></td>
+                                <td><%= c.telephone %></td>
+                                <td>
                                     <a class="ui mini primary button" href="/contact/<%= c.id %>/edit">✏️ Modifier</a>
                                     <a class="ui mini red button" href="/contact/<%= c.id %>/delete">🗑️ Supprimer</a>
                                 </td>
