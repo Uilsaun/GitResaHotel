@@ -72,9 +72,9 @@
                                 <td>
                                     <strong><%= c.nom_entreprise || c.nom %></strong>
                                 </td>
-                                <td><%= c.email %></td>
-                                <td><%= c.telephone %></td>
-                                <td>
+                                <td class="information"><%= c.email %></td>
+                                <td class="information"><%= c.telephone %></td>
+                                <td class="button">
                                     <a class="ui mini primary button" href="/contact/<%= c.id %>/edit">✏️ Modifier</a>
                                     <a class="ui mini red button" href="/contact/<%= c.id %>/delete">🗑️ Supprimer</a>
                                 </td>
