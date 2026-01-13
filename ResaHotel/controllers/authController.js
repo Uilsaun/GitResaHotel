@@ -147,6 +147,7 @@ class AuthController {
                 nombre_personnes: parseInt(nombre_personnes, 10)
             });
 
+            // Redirection vers /login avec message de succès
             res.redirect('/login?success=Inscription réussie ! Vous pouvez maintenant vous connecter');
         } catch (error) {
             console.error('Erreur lors de l\'inscription:', error);

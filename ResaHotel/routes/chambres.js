@@ -1,10 +1,13 @@
-//routes/chambres.js
+// routes/chambres.js
 import express from 'express';
 import ChambreController from '../controllers/chambreController.js';
 
 const router = express.Router();
 
-// Liste des chambres
+// Route pour les chambres disponibles (DOIT être AVANT les routes avec :id)
+router.get('/disponibles', ChambreController.showAvailable);
+
+// Liste de toutes les chambres (gestion admin)
 router.get('/', ChambreController.index);
 
 // Page création

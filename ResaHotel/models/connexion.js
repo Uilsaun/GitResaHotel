@@ -25,5 +25,6 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
+
 // Exporte le module pool
 export default pool;
