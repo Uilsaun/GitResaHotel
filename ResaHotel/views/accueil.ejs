@@ -131,6 +131,56 @@
             });
         }
     </script>
-</body>
 
+    <img src="/images/plane.png" alt="ticket" class="flying-plane">
+
+    
+
+    <div class="support-button" onclick="ouvrirTicket()">
+        <i class="question circle icon"></i>
+        <span>Aide</span>
+    </div>
+
+
+    <div class="ui modal" id="ticketModal">
+        <i class="close icon"></i>
+        <div class="header">
+            Besoin d'aide ?
+        </div>
+        <div class="content">
+            <form class="ui form" action="/support/ticket" method="POST">
+                <div class="field">
+                    <label>Votre nom</label>
+                    <input type="text" name="nom" required>
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="field">
+                    <label>Sujet</label>
+                    <select class="ui dropdown" name="sujet">
+                        <option value="">Choisir un sujet</option>
+                        <option value="reservation">Problème de réservation</option>
+                        <option value="chambre">Question sur les chambres</option>
+                        <option value="paiement">Problème de paiement</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Votre message</label>
+                    <textarea name="message" rows="4" required></textarea>
+                </div>
+                <button class="ui primary button" type="submit">Envoyer le ticket</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function ouvrirTicket() {
+        $('#ticketModal').modal('show');
+    }
+    </script>
+
+</body>
 </html>
