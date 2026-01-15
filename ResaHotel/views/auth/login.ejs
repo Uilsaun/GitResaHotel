@@ -1,148 +1,79 @@
 <!DOCTYPE html>
-<html lang="fr">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Gestion Hôtelière</title>
+     <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
-    <div class="login-container">
-        <div class="accent-bar"></div>
-
-        <div class="logo-container">
-            <div class="logo">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <polyline points="9 22 9 12 15 12 15 22" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
+    <!-- Navigation -->
+    <div class="ui inverted menu navigation-menu login-menu">
+        <div class="ui container">
+            <a href="/" class="header item">
+                Hôtel California
+            </a>
+            <a href="/" class="item">Accueil</a>
+            <a href="/chambres" class="item">Gérer les chambres</a>
+            <a href="/contact" class="item">Contact</a>
+            <a href="/clients" class="item">Client</a>
+            <div class="right menu">
+                <a href="/auth/login" class="item">Connexion</a>
             </div>
-            <h1>Bienvenue</h1>
-            <p>Connectez-vous à votre espace</p>
-        </div>
-
-        <!-- Message d'erreur (exemple) -->
-        <!-- <div class="error-message">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="8" x2="12" y2="12"/>
-                <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            <span>Identifiants incorrects</span>
-        </div> -->
-
-        <form id="loginForm" action="/login" method="POST">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <div class="input-wrapper">
-                    <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                        <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                    <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required
-                        autocomplete="email">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <div class="input-wrapper">
-                    <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required
-                        autocomplete="current-password">
-                    <button type="button" class="password-toggle" id="togglePassword">
-                        <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="options-row">
-                <div class="remember-me">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Se souvenir de moi</label>
-                </div>
-                <a href="/forgot-password" class="forgot-password">Mot de passe oublié ?</a>
-            </div>
-
-            <button type="submit" class="btn-login" id="loginBtn">
-                Se connecter
-            </button>
-        </form>
-
-        <div class="divider">
-            <span>OU</span>
-        </div>
-
-        <div class="register-link">
-            Pas encore de compte ? <a href="/register">Créer un compte</a>
         </div>
     </div>
 
-    <script>
-        // Toggle password visibility
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-        const eyeIcon = document.getElementById('eyeIcon');
+    <!-- Login Form Section -->
+    <div class="login-section">
+        <div class="login-container">
+            <div class="login-card">
+                <h2>Connexion</h2>
+                <p class="subtitle">Accédez à votre compte Hôtel California</p>
 
-        togglePassword.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
+                <form class="login-form" action="/ResaHotel/views/accueil.ejs" method="POST">
+                    <div class="field">
+                        <label for="username">Nom d'utilisateur</label>
+                        <input type="text" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
+                    </div>
 
-            if (type === 'text') {
-                eyeIcon.innerHTML = `
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                    <line x1="1" y1="1" x2="23" y2="23"/>
-                `;
-            } else {
-                eyeIcon.innerHTML = `
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                `;
-            }
-        });
+                    <div class="field">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                    </div>
 
-        // Form validation
-        const loginForm = document.getElementById('loginForm');
-        const loginBtn = document.getElementById('loginBtn');
+                    <button class="submit-btn" type="submit">Se connecter</button>
+                </form>
 
-        loginForm.addEventListener('submit', function (e) {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+                <div class="login-footer">
+                    <p>Pas encore de compte ? <a href="/auth/register">Inscrivez-vous ici</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            if (!email || !password) {
-                e.preventDefault();
-                alert('Veuillez remplir tous les champs');
-                return;
-            }
+    <!-- Footer -->
+    <div class="ui inverted vertical footer segment">
+        <div class="ui container">
+            <div class="ui stackable inverted divided equal height stackable grid">
+                <div class="three wide column">
+                    <h4 class="ui inverted header">À Propos</h4>
+                    <div class="ui inverted link list">
+                        <a href="/" class="item">Accueil</a>
+                        <a href="/contact" class="item">Contact</a>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted header">Hôtel California</h4>
+                    <p>Votre destination de luxe pour des séjours inoubliables.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Désactiver le bouton pendant la soumission
-            loginBtn.disabled = true;
-            loginBtn.textContent = 'Connexion en cours...';
-        });
-
-        // Animation des inputs
-        const inputs = document.querySelectorAll('input[type="email"], input[type="password"]');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function () {
-                this.parentElement.style.transform = 'scale(1.01)';
-            });
-
-            input.addEventListener('blur', function () {
-                this.parentElement.style.transform = 'scale(1)';
-            });
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
 </body>
-
 </html>

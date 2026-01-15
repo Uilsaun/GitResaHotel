@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .room-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .filter-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <div class="ui inverted menu navigation-menu">
+        <div class="ui container">
+            <a href="/" class="header item">
+                Hôtel California
+            </a>
+            <a href="/" class="item">Accueil</a>
+            <a href="/chambres" class="item">Gérer les chambres</a>
+            <a href="/contact" class="item">Contact</a>
+            <a href="/clients" class="item">Client</a>
+            <div class="right menu">
+                <a href="/auth/login" class="item">Connexion</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section with Search -->
+    <div style="padding-top: 80px; min-height: 100vh; background: #f5f5f5;">
+        <div class="ui container" style="padding: 3rem 0;">
+            
+            <!-- Filtre de recherche -->
+            <div class="filter-section">
+                <h2 class="ui inverted header" style="text-align: center; margin-bottom: 2rem;">
+                    <i class="search icon"></i>
+                    Rechercher une chambre
+                </h2>
+                
+                <form class="ui form" action="/chambres/disponibles" method="GET">
+                    <div class="fields">
+                        <div class="five wide field">
+                            <label style="color: white;">Date d'arrivée</label>
+                            <input type="date" name="date_arrivee" 
+                                   value="<%= filters.date_arrivee %>" 
+                                   min="<%= new Date().toISOString().split('T')[0] %>">
+                        </div>
+                        <div class="five wide field">
+                            <label style="color: white;">Date de départ</label>
+                            <input type="date" name="date_depart" 
+                                   value="<%= filters.date_depart %>"
+                                   min="<%= new Date().toISOString().split('T')[0] %>">
+                        </div>
+                        <div class="four wide field">
+                            <label style="color: white;">Nombre de personnes</label>
+                            <select class="ui dropdown" name="nb_personnes">
+                                <option value="1" <%= filters.nb_personnes == 1 ? 'selected' : '' %>>1 personne</option>
+                                <option value="2" <%= filters.nb_personnes == 2 ? 'selected' : '' %>>2 personnes</option>
+                                <option value="3" <%= filters.nb_personnes == 3 ? 'selected' : '' %>>3 personnes</option>
+                                <option value="4" <%= filters.nb_personnes == 4 ? 'selected' : '' %>>4 personnes</option>
+                                <option value="5" <%= filters.nb_personnes == 5 ? 'selected' : '' %>>5 personnes</option>
+                                <option value="6" <%= filters.nb_personnes == 6 ? 'selected' : '' %>>6 personnes</option>
+                            </select>
+                        </div>
+                        <div class="two wide field" style="display: flex; align-items: flex-end;">
+                            <button class="ui primary fluid button" type="submit">
+                                <i class="search icon"></i> Rechercher
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <% if (filters.date_arrivee && filters.date_depart) { %>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="/chambres/disponibles" class="ui inverted basic button">
+                            <i class="close icon"></i> Effacer les filtres
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- En-tête des résultats -->
+            <div class="ui segment" style="background: white; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 class="ui header">
+                    <i class="bed icon"></i>
+                    <div class="content">
+                        <%= hasDateFilter ? 'Chambres Disponibles' : 'Toutes nos Chambres' %>
+                        <div class="sub header">
+                            <% if (hasDateFilter) { %>
+                                Du <%= new Date(filters.date_arrivee).toLocaleDateString('fr-FR') %> 
+                                au <%= new Date(filters.date_depart).toLocaleDateString('fr-FR') %>
+                            <% } else { %>
+                                Découvrez notre sélection complète
+                            <% } %>
+                        </div>
+                    </div>
+                </h2>
+            </div>
+
+            <!-- Liste des chambres -->
+            <% if (chambres.length === 0) { %>
+                <div class="ui warning message" style="margin-top: 2rem;">
+                    <div class="header">
+                        <i class="inbox icon"></i>
+                        Aucune chambre disponible
+                    </div>
+                    <p>
+                        <% if (hasDateFilter) { %>
+                            Malheureusement, aucune chambre n'est disponible pour les dates sélectionnées. 
+                            Essayez de modifier vos dates ou le nombre de personnes.
+                        <% } else { %>
+                            Il n'y a actuellement aucune chambre dans notre système.
+                        <% } %>
+                    </p>
+                </div>
+            <% } else { %>
+                <div class="ui success message" style="margin-top: 2rem;">
+                    <i class="check circle icon"></i>
+                    <strong><%= chambres.length %></strong> chambre(s) 
+                    <%= hasDateFilter ? 'disponible(s)' : 'au total' %>
+                </div>
+
+                <div class="ui three stackable cards" style="margin-top: 2rem;">
+                    <% chambres.forEach(chambre => { %>
+                        <div class="ui card room-card">
+                            <div class="content">
+                                <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span>Chambre <%= chambre.numero %></span>
+                                    <div class="ui violet label">
+                                        <i class="users icon"></i>
+                                        <%= chambre.capacite %> pers.
+                                    </div>
+                                </div>
+                                <div class="meta" style="margin-top: 1rem;">
+                                    <span class="date">
+                                        <i class="bed icon"></i>
+                                        Capacité maximale : <%= chambre.capacite %> personne(s)
+                                    </span>
+                                </div>
+                                <div class="description" style="margin-top: 1rem;">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="check circle icon green"></i>
+                                            <div class="content">Wi-Fi gratuit</div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="check circle icon green"></i>
+                                            <div class="content">Télévision HD</div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="check circle icon green"></i>
+                                            <div class="content">Salle de bain privée</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <button class="ui primary fluid button">
+                                    <i class="calendar check icon"></i>
+                                    Réserver maintenant
+                                </button>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="ui container">
+            <div class="ui four column stackable grid">
+                <div class="column">
+                    <h4>À Propos</h4>
+                    <p>Hôtel California, votre destination de luxe pour des séjours inoubliables.</p>
+                </div>
+                <div class="column">
+                    <h4>Liens Rapides</h4>
+                    <div class="ui link list">
+                        <a href="/chambres/disponibles" class="item">Nos Chambres</a>
+                        <a href="/service" class="item">Service</a>
+                        <a href="/contact" class="item">Contact</a>
+                        <a href="/clients" class="item">Client</a>
+                    </div>
+                </div>
+                <div class="column">
+                    <h4>Contact</h4>
+                    <p>📍 30 r Louise Michel, 38000 Grenoble<br>
+                        📞 04 38 12 36 00<br>
+                        📧 Kwentinsaundev@hotelcalifornia.fr</p>
+                </div>
+                <div class="column">
+                    <h4>Suivez-nous</h4>
+                    <div class="ui huge icons social-icons">
+                        <a href="https://www.facebook.com/login.php" target="_blank">
+                            <i class="facebook icon"></i>
+                        </a>
+                        <a href="https://www.instagram.com">
+                            <i class="instagram icon"></i>
+                        </a>
+                        <a href="https://x.com">
+                            <i class="x icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="footer-bottom">
+                <p>© 2025 Hôtel California. Tous droits réservés.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+    <script>
+        $('.ui.dropdown').dropdown();
+
+        // Validation des dates
+        const today = new Date().toISOString().split('T')[0];
+        const arrivalInput = document.querySelector('input[name="date_arrivee"]');
+        const departureInput = document.querySelector('input[name="date_depart"]');
+
+        if (arrivalInput && departureInput) {
+            arrivalInput.addEventListener('change', function() {
+                departureInput.setAttribute('min', this.value);
+                if (departureInput.value && departureInput.value <= this.value) {
+                    departureInput.value = '';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

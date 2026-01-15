@@ -9,35 +9,25 @@
         <%= title %>
     </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
-    <link rel="stylesheet" href="/css/styleclient.css">
+    <link rel="stylesheet" href="/style.css">
 
 </head>
 
 <body>
     <!-- Navigation -->
-    <div class="ui inverted menu"
-        style="margin: 0; border-radius: 0; background: rgba(26, 26, 46, 0.95); position: fixed; width: 100%; z-index: 1000; backdrop-filter: blur(10px);">
+    <div class="ui inverted menu navigation-menu">
         <div class="ui container">
-            <a href="/" class="header item" style="font-size: 1.3rem; font-weight: 300;">
-                ✨ <%= title.split('-')[0].trim() %>
+            <a href="/" class="header item">
+                Hôtel California
             </a>
             <a href="/" class="item">Accueil</a>
             <a href="/chambres" class="item">Gérer les chambres</a>
-            <a href="/service" class="item">Services</a>
             <a href="/contact" class="item">Contact</a>
-            <a href="/clients" class="item active">Clients</a>
+            <a href="/clients" class="item">Client</a>
             <div class="right menu">
-                <a class="item">
-                    <i class="user icon"></i> Connexion
-                </a>
+                <a href="/auth/login" class="item">Connexion</a>
             </div>
         </div>
-    </div>
-
-    <!-- Hero Section -->
-    <div class="clients-hero">
-        <h1>👥 Gestion des Clients</h1>
-        <p>Gérez vos clients et leurs informations en toute simplicité</p>
     </div>
 
     <!-- Main Content -->
@@ -150,7 +140,7 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer" style="background: rgba(26, 26, 46, 0.95); color: #fff; padding: 50px 0; margin-top: 60px;">
+    <div class="footer">
         <div class="ui container">
             <div class="ui four column stackable grid">
                 <div class="column">

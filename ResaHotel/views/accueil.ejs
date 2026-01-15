@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hôtel California</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <div class="ui inverted menu navigation-menu">
+        <div class="ui container">
+            <a href="/" class="header item">
+                Hôtel California
+            </a>
+            <a href="/" class="item">Accueil</a>
+            <a href="/chambres" class="item">Gérer les chambres</a>
+            <a href="/contact" class="item">Contact</a>
+            <a href="/clients" class="item">Client</a>
+            <div class="right menu">
+                <a href="/auth/login" class="item">Connexion</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1>Bienvenue à l'Hôtel California</h1>
+            <p>Vivez une expérience inoubliable dans le luxe et le confort</p>
+
+            <!-- Booking Card -->
+            <div class="booking-card">
+                <form class="ui form" action="/chambres" method="GET">
+                    <h2>Réservez votre séjour</h2>
+                    <div class="fields">
+                        <div class="five wide field">
+                            <label>Arrivée</label>
+                            <input type="date" name="date_arrivee" required>
+                        </div>
+                        <div class="five wide field">
+                            <label>Départ</label>
+                            <input type="date" name="date_depart" required>
+                        </div>
+                        <div class="six wide field">
+                            <label>Personnes</label>
+                            <select class="ui dropdown" name="nb_personnes">
+                                <option value="1">1 personne</option>
+                                <option value="2" selected>2 personnes</option>
+                                <option value="3">3 personnes</option>
+                                <option value="4">4 personnes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="ui primary huge fluid button" type="submit">
+                        <i class="search icon"></i> Rechercher des chambres
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="ui container">
+            <div class="ui four column stackable grid">
+                <div class="column">
+                    <h4>À Propos</h4>
+                    <p>Hôtel California, votre destination de luxe pour des séjours inoubliables.</p>
+                </div>
+                <div class="column">
+                    <h4>Liens Rapides</h4>
+                    <div class="ui link list">
+                        <a href="chambres" class="item">Nos Chambres</a>
+                        <a href="/service" class="item">Service</a>
+                        <a class="item">Réservation</a>
+                        <a class="item">Contact</a>
+                        <a href="/clients" class="item">Client</a>
+                    </div>
+                </div>
+                <div class="column">
+                    <h4>Contact</h4>
+                    <p>📍 30 r Louise Michel, 38000 Grenoble<br>
+                        📞 04 38 12 36 00<br>
+                        📧 Kwentinsaundev@hotelcalifornia.fr</p>
+                </div>
+                <div class="column">
+                    <h4>Suivez-nous</h4>
+                    <div class="ui huge icons social-icons">
+                        <a href="https://www.facebook.com/login.php" target="_blank">
+                            <i class="facebook icon"></i>
+                        </a>
+                        <a href="https://www.instagram.com">
+                            <i class="instagram icon"></i>
+                        </a>
+                        <a href="https://x.com">
+                            <i class="x icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="footer-bottom">
+                <p>© 2025 Hôtel California. Tous droits réservés.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+    <script>
+        $('.ui.dropdown').dropdown();
+
+        const today = new Date().toISOString().split('T')[0];
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.setAttribute('min', today);
+        });
+
+        const arrivalInput = document.querySelector('input[name="date_arrivee"]');
+        const departureInput = document.querySelector('input[name="date_depart"]');
+        if (arrivalInput && departureInput) {
+            arrivalInput.addEventListener('change', function () {
+                departureInput.setAttribute('min', this.value);
+                if (departureInput.value && departureInput.value <= this.value) {
+                    departureInput.value = '';
+                }
+            });
+        }
+    </script>
+
+    <img src="/images/plane.png" alt="ticket" class="flying-plane">
+
+    
+
+    <div class="support-button" onclick="ouvrirTicket()">
+        <i class="question circle icon"></i>
+        <span>Aide</span>
+    </div>
+
+
+    <div class="ui modal" id="ticketModal">
+        <i class="close icon"></i>
+        <div class="header">
+            Besoin d'aide ?
+        </div>
+        <div class="content">
+            <form class="ui form" action="/support/ticket" method="POST">
+                <div class="field">
+                    <label>Votre nom</label>
+                    <input type="text" name="nom" required>
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="field">
+                    <label>Sujet</label>
+                    <select class="ui dropdown" name="sujet">
+                        <option value="">Choisir un sujet</option>
+                        <option value="reservation">Problème de réservation</option>
+                        <option value="chambre">Question sur les chambres</option>
+                        <option value="paiement">Problème de paiement</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Votre message</label>
+                    <textarea name="message" rows="4" required></textarea>
+                </div>
+                <button class="ui primary button" type="submit">Envoyer le ticket</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function ouvrirTicket() {
+        $('#ticketModal').modal('show');
+    }
+    </script>
+
+</body>
+</html>
