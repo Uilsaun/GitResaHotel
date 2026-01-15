@@ -35,16 +35,16 @@
 
             <!-- Booking Card -->
             <div class="booking-card">
-                <form class="ui form" action="/chambres" method="GET">
+                <form class="ui form" action="/chambres/disponibles" method="GET">
                     <h2>Réservez votre séjour</h2>
                     <div class="fields">
                         <div class="five wide field">
                             <label>Arrivée</label>
-                            <input type="date" name="date_arrivee" required>
+                            <input type="date" name="date_arrivee">
                         </div>
                         <div class="five wide field">
                             <label>Départ</label>
-                            <input type="date" name="date_depart" required>
+                            <input type="date" name="date_depart">
                         </div>
                         <div class="six wide field">
                             <label>Personnes</label>
@@ -53,12 +53,19 @@
                                 <option value="2" selected>2 personnes</option>
                                 <option value="3">3 personnes</option>
                                 <option value="4">4 personnes</option>
+                                <option value="5">5 personnes</option>
+                                <option value="6">6 personnes</option>
                             </select>
                         </div>
                     </div>
                     <button class="ui primary huge fluid button" type="submit">
                         <i class="search icon"></i> Rechercher des chambres
                     </button>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="/chambres/disponibles" style="color: white; text-decoration: underline;">
+                            Voir toutes les chambres sans dates
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
@@ -75,10 +82,9 @@
                 <div class="column">
                     <h4>Liens Rapides</h4>
                     <div class="ui link list">
-                        <a href="chambres" class="item">Nos Chambres</a>
+                        <a href="/chambres/disponibles" class="item">Nos Chambres</a>
                         <a href="/service" class="item">Service</a>
-                        <a class="item">Réservation</a>
-                        <a class="item">Contact</a>
+                        <a href="/contact" class="item">Contact</a>
                         <a href="/clients" class="item">Client</a>
                     </div>
                 </div>
@@ -131,56 +137,60 @@
             });
         }
     </script>
+</body>
 
-    <img src="/images/plane.png" alt="ticket" class="flying-plane">
+</html>
 
-    
+<img src="/images/plane.png" alt="ticket" class="flying-plane">
 
-    <div class="support-button" onclick="ouvrirTicket()">
-        <i class="question circle icon"></i>
-        <span>Aide</span>
+
+
+<div class="support-button" onclick="ouvrirTicket()">
+    <i class="question circle icon"></i>
+    <span>Aide</span>
+</div>
+
+
+<div class="ui modal" id="ticketModal">
+    <i class="close icon"></i>
+    <div class="header">
+        Besoin d'aide ?
     </div>
-
-
-    <div class="ui modal" id="ticketModal">
-        <i class="close icon"></i>
-        <div class="header">
-            Besoin d'aide ?
-        </div>
-        <div class="content">
-            <form class="ui form" action="/support/ticket" method="POST">
-                <div class="field">
-                    <label>Votre nom</label>
-                    <input type="text" name="nom" required>
-                </div>
-                <div class="field">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
-                </div>
-                <div class="field">
-                    <label>Sujet</label>
-                    <select class="ui dropdown" name="sujet">
-                        <option value="">Choisir un sujet</option>
-                        <option value="reservation">Problème de réservation</option>
-                        <option value="chambre">Question sur les chambres</option>
-                        <option value="paiement">Problème de paiement</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Votre message</label>
-                    <textarea name="message" rows="4" required></textarea>
-                </div>
-                <button class="ui primary button" type="submit">Envoyer le ticket</button>
-            </form>
-        </div>
+    <div class="content">
+        <form class="ui form" action="/support/ticket" method="POST">
+            <div class="field">
+                <label>Votre nom</label>
+                <input type="text" name="nom" required>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="field">
+                <label>Sujet</label>
+                <select class="ui dropdown" name="sujet">
+                    <option value="">Choisir un sujet</option>
+                    <option value="reservation">Problème de réservation</option>
+                    <option value="chambre">Question sur les chambres</option>
+                    <option value="paiement">Problème de paiement</option>
+                    <option value="autre">Autre</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Votre message</label>
+                <textarea name="message" rows="4" required></textarea>
+            </div>
+            <button class="ui primary button" type="submit">Envoyer le ticket</button>
+        </form>
     </div>
+</div>
 
-    <script>
+<script>
     function ouvrirTicket() {
         $('#ticketModal').modal('show');
     }
-    </script>
+</script>
 
 </body>
+
 </html>

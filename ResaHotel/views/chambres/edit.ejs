@@ -33,7 +33,7 @@
             <p>Cette action pourra être modifiée à tout moment. Veuillez insérer le bon numéro de la chambre associée.</p>
         </div>
 
-        <form action="/chambres/update/<%= chambre.id %>" method="PATCH" style="margin-top: 20px;">
+        <form action="/chambres/update/<%= chambre.id %>" method="POST" style="margin-top: 20px;">
             <button type="submit" class="ui green button">✔︎ Confirmer la modification</button>
             <a href="/chambres" class="ui button">Annuler</a>
         </form>
