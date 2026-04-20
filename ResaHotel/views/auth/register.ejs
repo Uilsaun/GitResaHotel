@@ -1,47 +1,152 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
-    
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
-    <div class="container">
-        <h1>Créer un compte</h1>
-        <p class="subtitle">Rejoignez-nous dès aujourd'hui</p>
-        
-        <div id="message" class="message"></div>
+    <!-- Navigation -->
+    <%- include('../partials/navigation') %>
 
-        <form id="signupForm">
-            <div class="form-group">
-                <label for="name">Nom complet</label>
-                <input type="text" id="name" name="name" required placeholder="Jean Dupont">
+    <!-- Registration Form Section -->
+    <div class="login-section" style="padding-top: 80px;">
+        <div class="ui container" style="max-width: 600px; padding: 3rem 0;">
+            <div class="ui segment">
+                <h2 class="ui header center aligned">
+                    <i class="user plus icon"></i>
+                    <div class="content">
+                        Créer un compte
+                        <div class="sub header">Rejoignez Hôtel California</div>
+                    </div>
+                </h2>
+
+                <!-- Message d'erreur -->
+                <% if (error) { %>
+                    <div class="ui negative message">
+                        <i class="close icon"></i>
+                        <div class="header">Erreur lors de l'inscription</div>
+                        <p>
+                            <%= error %>
+                        </p>
+                    </div>
+                    <% } %>
+
+                        <!-- Message de succès -->
+                        <% if (success) { %>
+                            <div class="ui positive message">
+                                <i class="close icon"></i>
+                                <div class="header">Inscription réussie !</div>
+                                <p>
+                                    <%= success %>
+                                </p>
+                            </div>
+                            <% } %>
+
+                                <!-- Formulaire d'inscription -->
+                                <form class="ui form" action="/auth/register" method="POST">
+                                    <div class="field">
+                                        <label>Nom complet</label>
+                                        <input type="text" name="nom" placeholder="Jean Dupont"
+                                            value="<%= formData.nom || '' %>" required>
+                                    </div>
+
+                                    <div class="field">
+                                        <label>Adresse email</label>
+                                        <input type="email" name="email" placeholder="jean.dupont@exemple.fr"
+                                            value="<%= formData.email || '' %>" required>
+                                    </div>
+
+                                    <div class="ui divider"></div>
+
+                                    <div class="field">
+                                        <label>Mot de passe</label>
+                                        <input type="password" name="password" placeholder="••••••••" required>
+                                        <div class="ui pointing label"
+                                            style="margin-top: 5px; border: none; background: transparent; color: #999; font-size: 0.9em;">
+                                            Minimum 8 caractères avec majuscule, minuscule et chiffre
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <label>Confirmer le mot de passe</label>
+                                        <input type="password" name="confirmPassword" placeholder="••••••••" required>
+                                    </div>
+
+                                    <div class="ui divider"></div>
+
+                                    <button class="ui primary fluid large button" type="submit">
+                                        <i class="user plus icon"></i>
+                                        S'inscrire
+                                    </button>
+                                </form>
+
+                                <div class="ui horizontal divider" style="margin-top: 2rem;">Ou</div>
+
+                                <div style="text-align: center; margin-top: 1rem;">
+                                    <p>Vous avez déjà un compte ? <a href="/auth/login">Connectez-vous ici</a></p>
+                                </div>
             </div>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <label for="email">Adresse email</label>
-                <input type="email" id="email" name="email" required placeholder="jean.dupont@exemple.fr">
-            </div>
-
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required placeholder="••••••••">
-                <div class="password-requirements">
-                    Minimum 8 caractères
+    <!-- Footer -->
+    <div class="footer">
+        <div class="ui container">
+            <div class="ui four column stackable grid">
+                <div class="column">
+                    <h4>À Propos</h4>
+                    <p>Hôtel California, votre destination de luxe pour des séjours inoubliables.</p>
+                </div>
+                <div class="column">
+                    <h4>Liens Rapides</h4>
+                    <div class="ui link list">
+                        <a href="/chambres/disponibles" class="item">Nos Chambres</a>
+                        <a href="/contact" class="item">Contact</a>
+                    </div>
+                </div>
+                <div class="column">
+                    <h4>Contact</h4>
+                    <p>📍 30 r Louise Michel, 38000 Grenoble<br>
+                        📞 04 38 12 36 00<br>
+                        📧 Kwentinsaundev@hotelcalifornia.fr</p>
+                </div>
+                <div class="column">
+                    <h4>Suivez-nous</h4>
+                    <div class="ui huge icons social-icons">
+                        <a href="https://www.facebook.com/login.php" target="_blank">
+                            <i class="facebook icon"></i>
+                        </a>
+                        <a href="https://www.instagram.com">
+                            <i class="instagram icon"></i>
+                        </a>
+                        <a href="https://x.com">
+                            <i class="x icon"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="confirmPassword">Confirmer le mot de passe</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="••••••••">
+            <div class="ui divider"></div>
+            <div class="footer-bottom">
+                <p>© 2025 Hôtel California. Tous droits réservés.</p>
             </div>
-
-            <button type="submit" class="btn">S'inscrire</button>
-        </form>
-
-        <div class="login-link">
-            Vous avez déjà un compte ? <a href="/auth/login" class="item">Connexion</a>
         </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+    <script>
+        $('.ui.dropdown').dropdown();
+        $('.message .close').on('click', function () {
+            $(this).closest('.message').transition('fade');
+        });
+    </script>
 </body>
+
 </html>

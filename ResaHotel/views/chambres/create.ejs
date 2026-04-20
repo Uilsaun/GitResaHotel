@@ -1,106 +1,212 @@
-<!-- views/chambres/create.ejs -->
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
+    <title><%= title %></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
     <!-- Navigation -->
-    <div class="ui inverted menu"
-        style="margin: 0; border-radius: 0; background: rgba(26, 26, 46, 0.95); position: fixed; width: 100%; z-index: 1000; backdrop-filter: blur(10px);">
-        <div class="ui container">
-            <a href="/" class="header item" style="font-size: 1.3rem; font-weight: 300;">
-                 Hôtel California
-            </a>
-            <a href="/" class="item">Accueil</a>
-            <a href="/chambres" class="item active">Gérer les chambres</a>
-            <a href="/contact" class="item">Contact</a>
-            <a href="/clients" class="item">Client</a>
-        </div>
-    </div>
+    <%- include('../partials/navigation') %>
 
-    <div class="ui container" style="margin-top: 100px; margin-bottom: 50px;">
-        <div class="ui breadcrumb">
-            <a href="/" class="section">Accueil</a>
-            <div class="divider"> / </div>
-            <a href="/chambres" class="section">Chambres</a>
-            <div class="divider"> / </div>
-            <div class="active section">Ajouter</div>
-        </div>
-
-        <h1 class="ui header" style="margin-top: 30px;">
-            <i class="plus circle icon"></i>
-            <div class="content">
-                Ajouter une Chambre
-                <div class="sub header">Créez une nouvelle chambre dans le système</div>
+    <!-- Contenu principal -->
+    <div style="padding-top: 80px; min-height: 100vh; background: #f5f5f5;">
+        <div class="ui container" style="padding: 3rem 0;">
+            
+            <!-- Breadcrumb -->
+            <div class="ui breadcrumb">
+                <a href="/" class="section">Accueil</a>
+                <div class="divider"> / </div>
+                <a href="/chambres/disponibles" class="section">Chambres disponibles</a>
+                <div class="divider"> / </div>
+                <div class="active section">Nouvelle réservation</div>
             </div>
-        </h1>
 
-        <% if (errors && errors.length> 0) { %>
-            <div class="ui negative message">
-                <div class="header">Erreur lors de la création</div>
-                <ul class="list">
-                    <% errors.forEach(error=> { %>
-                        <li>
-                            <%= error.msg %>
-                        </li>
+            <!-- En-tête -->
+            <div class="ui segment" style="background: white; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 2rem;">
+                <h2 class="ui header">
+                    <i class="calendar plus icon"></i>
+                    <div class="content">
+                        Nouvelle Réservation
+                        <div class="sub header">
+                            Réservez une chambre pour votre client
+                        </div>
+                    </div>
+                </h2>
+            </div>
+
+            <!-- Messages d'erreur -->
+            <% if (errors && errors.length > 0) { %>
+                <div class="ui negative message" style="margin-top: 2rem;">
+                    <div class="header">
+                        <i class="exclamation triangle icon"></i>
+                        Erreur lors de la réservation
+                    </div>
+                    <ul class="list">
+                        <% errors.forEach(error => { %>
+                            <li><%= error.msg %></li>
                         <% }) %>
-                </ul>
-            </div>
+                    </ul>
+                </div>
             <% } %>
 
-                <div class="ui segment">
-                    <form class="ui form" action="/chambres/create" method="POST">
-                        <div class="two fields">
-                            <div class="required field">
-                                <label>Numéro de la chambre</label>
-                                <input type="text" name="numero" placeholder="Ex: 101, 202, A12..."
-                                    value="<%= chambre.numero || '' %>" required>
-                                <div class="ui pointing label"
-                                    style="margin-top: 5px; border: none; background: transparent; color: #999; font-size: 0.9em;">
-                                    Le numéro doit être unique
-                                </div>
-                            </div>
-                            <div class="required field">
-                                <label>Capacité</label>
-                                <select class="ui dropdown" name="capacite" required>
-                                    <option value="">Sélectionnez...</option>
-                                    <option value="1" <%=chambre.capacite==1 ? 'selected' : '' %>>1 personne</option>
-                                    <option value="2" <%=chambre.capacite==2 ? 'selected' : '' %>>2 personnes</option>
-                                    <option value="3" <%=chambre.capacite==3 ? 'selected' : '' %>>3 personnes</option>
-                                    <option value="4" <%=chambre.capacite==4 ? 'selected' : '' %>>4 personnes</option>
-                                    <option value="5" <%=chambre.capacite==5 ? 'selected' : '' %>>5 personnes</option>
-                                    <option value="6" <%=chambre.capacite==6 ? 'selected' : '' %>>6 personnes</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="ui divider"></div>
-
-                        <div class="field" style="text-align: right;">
-                            <a href="/chambres" class="ui button">
-                                <i class="cancel icon"></i> Annuler
-                            </a>
-                            <button class="ui primary button" type="submit">
-                                <i class="save icon"></i> Créer la chambre
-                            </button>
-                        </div>
-                    </form>
+            <!-- Informations de la chambre sélectionnée -->
+            <% if (chambre) { %>
+                <div class="ui info message" style="margin-top: 2rem;">
+                    <div class="header">
+                        <i class="bed icon"></i>
+                        Chambre sélectionnée
+                    </div>
+                    <p>
+                        <strong>Chambre n° <%= chambre.numero %></strong> - 
+                        Capacité : <%= chambre.capacite %> personne(s)
+                    </p>
+                    <% if (filters.date_arrivee && filters.date_depart) { %>
+                        <p>
+                            <i class="calendar icon"></i>
+                            Du <%= new Date(filters.date_arrivee).toLocaleDateString('fr-FR') %> 
+                            au <%= new Date(filters.date_depart).toLocaleDateString('fr-FR') %>
+                        </p>
+                    <% } %>
                 </div>
+            <% } %>
+
+            <!-- Formulaire de réservation -->
+            <div class="ui segment" style="margin-top: 2rem;">
+                <form class="ui form" action="/reservations/create" method="POST">
+                    
+                    <!-- Sélection du client -->
+                    <div class="required field">
+                        <label>
+                            <i class="user icon"></i>
+                            Sélectionner un client
+                        </label>
+                        <select class="ui search dropdown" name="client_id" required>
+                            <option value="">Choisir un client...</option>
+                            <% clients.forEach(client => { %>
+                                <option value="<%= client.id %>" 
+                                        <%= filters.client_id == client.id ? 'selected' : '' %>>
+                                    <%= client.nom %> - <%= client.email %> - <%= client.telephone %>
+                                </option>
+                            <% }) %>
+                        </select>
+                        <div class="ui pointing label" style="margin-top: 5px; border: none; background: transparent; color: #999; font-size: 0.9em;">
+                            Si le client n'existe pas, <a href="/clients/create">créez-le d'abord</a>
+                        </div>
+                    </div>
+
+                    <div class="ui divider"></div>
+
+                    <!-- Sélection de la chambre -->
+                    <div class="required field">
+                        <label>
+                            <i class="bed icon"></i>
+                            Chambre
+                        </label>
+                        <% if (chambre) { %>
+                            <input type="hidden" name="chambre_id" value="<%= chambre.id %>">
+                            <div class="ui segment">
+                                <div class="ui violet ribbon label">Chambre <%= chambre.numero %></div>
+                                <p style="margin-top: 1rem;">
+                                    <i class="users icon"></i> Capacité : <%= chambre.capacite %> personne(s)
+                                </p>
+                            </div>
+                        <% } else { %>
+                            <select class="ui dropdown" name="chambre_id" required>
+                                <option value="">Choisir une chambre...</option>
+                                <!-- Vous devriez passer la liste des chambres disponibles depuis le controller -->
+                            </select>
+                        <% } %>
+                    </div>
+
+                    <div class="ui divider"></div>
+
+                    <!-- Dates de réservation -->
+                    <div class="two fields">
+                        <div class="required field">
+                            <label>
+                                <i class="calendar icon"></i>
+                                Date d'arrivée
+                            </label>
+                            <input type="date" 
+                                   name="date_arrivee" 
+                                   value="<%= filters.date_arrivee %>" 
+                                   min="<%= new Date().toISOString().split('T')[0] %>"
+                                   required>
+                        </div>
+                        <div class="required field">
+                            <label>
+                                <i class="calendar icon"></i>
+                                Date de départ
+                            </label>
+                            <input type="date" 
+                                   name="date_depart" 
+                                   value="<%= filters.date_depart %>"
+                                   min="<%= new Date().toISOString().split('T')[0] %>"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="ui divider"></div>
+
+                    <!-- Boutons d'action -->
+                    <div class="field" style="text-align: right;">
+                        <a href="/chambres/disponibles" class="ui button">
+                            <i class="cancel icon"></i> Annuler
+                        </a>
+                        <button class="ui primary button" type="submit">
+                            <i class="check icon"></i> Confirmer la réservation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
         <div class="ui container">
-            <div style="text-align: center; padding: 20px 0;">
+            <div class="ui four column stackable grid">
+                <div class="column">
+                    <h4>À Propos</h4>
+                    <p>Hôtel California, votre destination de luxe pour des séjours inoubliables.</p>
+                </div>
+                <div class="column">
+                    <h4>Liens Rapides</h4>
+                    <div class="ui link list">
+                        <a href="/chambres/disponibles" class="item">Nos Chambres</a>
+                        <a href="/service" class="item">Service</a>
+                        <a href="/contact" class="item">Contact</a>
+                        <a href="/clients" class="item">Client</a>
+                    </div>
+                </div>
+                <div class="column">
+                    <h4>Contact</h4>
+                    <p>📍 30 r Louise Michel, 38000 Grenoble<br>
+                        📞 04 38 12 36 00<br>
+                        📧 Kwentinsaundev@hotelcalifornia.fr</p>
+                </div>
+                <div class="column">
+                    <h4>Suivez-nous</h4>
+                    <div class="ui huge icons social-icons">
+                        <a href="https://www.facebook.com/login.php" target="_blank">
+                            <i class="facebook icon"></i>
+                        </a>
+                        <a href="https://www.instagram.com">
+                            <i class="instagram icon"></i>
+                        </a>
+                        <a href="https://x.com">
+                            <i class="x icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="footer-bottom">
                 <p>© 2025 Hôtel California. Tous droits réservés.</p>
             </div>
         </div>
@@ -109,7 +215,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
     <script>
+        // Initialiser les dropdowns Semantic UI
         $('.ui.dropdown').dropdown();
+
+        // Validation des dates
+        const arrivalInput = document.querySelector('input[name="date_arrivee"]');
+        const departureInput = document.querySelector('input[name="date_depart"]');
+
+        if (arrivalInput && departureInput) {
+            arrivalInput.addEventListener('change', function() {
+                departureInput.setAttribute('min', this.value);
+                if (departureInput.value && departureInput.value <= this.value) {
+                    departureInput.value = '';
+                }
+            });
+        }
     </script>
 </body>
 

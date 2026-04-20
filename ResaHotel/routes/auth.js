@@ -28,7 +28,6 @@ router.get('/register', isNotAuthenticated, AuthController.showRegisterPage);
 router.post('/register', isNotAuthenticated, AuthController.register);
 
 // Routes protégées (nécessite une connexion)
-router.get('/profile', isAuthenticated, AuthController.showProfile);
 router.post('/profile', isAuthenticated, AuthController.updateProfile);
 router.post('/change-password', isAuthenticated, AuthController.changePassword);
 

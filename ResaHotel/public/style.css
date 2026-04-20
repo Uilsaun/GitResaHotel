@@ -737,3 +737,78 @@ td.information {
         justify-content: flex-end;
     }
 }
+
+/* Avatar utilisateur dans la navigation */
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 8px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-menu-item {
+    display: flex;
+    align-items: center;
+}
+
+.user-menu-item .user-name {
+    margin-right: 5px;
+}
+
+.room-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.filter-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+/* Style pour la carte de chambre avec hover */
+.room-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Section de filtre avec gradient */
+.filter-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+/* Navigation fixe */
+.navigation-menu {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+.no-hover:hover {
+    background: transparent !important;
+    cursor: default !important;
+}

@@ -110,11 +110,17 @@ class Auth {
     }
 
     // Inscription d'un nouveau client
+    // INSCRIPTION SIMPLIFIÉE
     static async register(clientData) {
         let connection;
         try {
-            // Validation
-            this.validateClientData(clientData, true);
+            // Validation simplifiée
+            if (!clientData.nom || !clientData.email || !clientData.password) {
+                throw new AuthError('Nom, email et mot de passe requis', 'VALIDATION_ERROR');
+            }
+
+            this.validateEmail(clientData.email);
+            this.validatePassword(clientData.password);
 
             // Vérifier si l'email existe déjà
             const existingClient = await this.findByEmail(clientData.email);
@@ -123,44 +129,31 @@ class Auth {
             }
 
             // Hasher le mot de passe
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(clientData.password, saltRounds);
+            const hashedPassword = await bcrypt.hash(clientData.password, 10);
 
-            // Transaction
+            // Insert dans la DB
             connection = await db.getConnection();
             await connection.beginTransaction();
 
             const [result] = await connection.execute(
-                `INSERT INTO clients (nom, email, telephone, nombre_personnes, password) 
-                 VALUES (?, ?, ?, ?, ?)`,
-                [
-                    clientData.nom.trim(),
-                    clientData.email.toLowerCase().trim(),
-                    clientData.telephone.trim(),
-                    clientData.nombre_personnes,
-                    hashedPassword
-                ]
+                `INSERT INTO clients (nom, email, password) VALUES (?, ?, ?)`,
+                [clientData.nom.trim(), clientData.email.toLowerCase().trim(), hashedPassword]
             );
 
             await connection.commit();
 
-            // Retourner le client sans le mot de passe
+            // Retourner le client sans mot de passe
             return await this.findById(result.insertId);
+
         } catch (error) {
-            if (connection) {
-                await connection.rollback();
-            }
+            if (connection) await connection.rollback();
             if (error instanceof AuthError) throw error;
-            throw new AuthError(
-                `Erreur lors de l'inscription: ${error.message}`,
-                'REGISTRATION_ERROR'
-            );
+            throw new AuthError(`Erreur lors de l'inscription: ${error.message}`, 'REGISTRATION_ERROR');
         } finally {
-            if (connection) {
-                connection.release();
-            }
+            if (connection) connection.release();
         }
     }
+
 
     // Connexion d'un client
     static async login(email, password) {
@@ -358,16 +351,14 @@ class Auth {
             const nombre_personnes = clientData.nombre_personnes !== undefined ? clientData.nombre_personnes : this.nombre_personnes;
 
             await connection.execute(
-                'UPDATE clients SET nom = ?, telephone = ?, nombre_personnes = ? WHERE id = ?',
-                [nom, telephone, nombre_personnes, this.id]
+                'UPDATE clients SET nom = ? WHERE id = ?',
+                [nom, this.id]
             );
 
             await connection.commit();
 
             // Mise à jour de l'instance
             this.nom = nom;
-            this.telephone = telephone;
-            this.nombre_personnes = nombre_personnes;
 
             return true;
         } catch (error) {

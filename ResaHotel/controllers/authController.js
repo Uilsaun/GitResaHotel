@@ -12,9 +12,11 @@ class AuthController {
             res.render('auth/login', {
                 title: 'Connexion',
                 error: null,
-                success: req.query.success || null
+                success: req.query.success || null,
+                formData: null // ← ajoute cette ligne
             });
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Erreur affichage page login:', error);
             res.status(500).render('error', {
                 message: 'Erreur lors de l\'affichage de la page',
@@ -38,7 +40,7 @@ class AuthController {
             }
 
             const client = await Auth.login(email, password);
-
+            console.log(email, password);
             // Créer la session
             req.session.clientId = client.id;
             req.session.clientEmail = client.email;
@@ -53,7 +55,7 @@ class AuthController {
                 req.session.cookie.maxAge = null; // Session browser
             }
 
-            res.redirect('/dashboard');
+            res.redirect('/chambres/disponibles');
         } catch (error) {
             console.error('Erreur lors de la connexion:', error);
 
@@ -82,15 +84,15 @@ class AuthController {
         try {
             req.session.destroy((err) => {
                 if (err) {
-                    console.error('Erreur lors de la déconnexion:', err);
-                    return res.redirect('/dashboard');
+                    return res.redirect('/');
                 }
+
                 res.clearCookie('connect.sid');
-                res.redirect('/login?success=Vous avez été déconnecté avec succès');
+                res.redirect('/');
             });
+
         } catch (error) {
-            console.error('Erreur lors de la déconnexion:', error);
-            res.redirect('/dashboard');
+            res.redirect('/');
         }
     }
 
@@ -119,12 +121,12 @@ class AuthController {
     // Traiter l'inscription
     static async register(req, res) {
         try {
-            const { email, password, confirmPassword, nom, telephone, nombre_personnes } = req.body;
+            const { email, password, confirmPassword, nom } = req.body;
 
-            if (!email || !password || !confirmPassword || !nom || !telephone || !nombre_personnes) {
+            if (!email || !password || !confirmPassword || !nom) {
                 return res.status(400).render('auth/register', {
                     title: 'Inscription',
-                    error: 'Tous les champs sont requis',
+                    error: 'Nom, email et mot de passe requis',
                     success: null,
                     formData: req.body
                 });
@@ -139,60 +141,23 @@ class AuthController {
                 });
             }
 
-            const client = await Auth.register({
-                email,
-                password,
-                nom,
-                telephone,
-                nombre_personnes: parseInt(nombre_personnes, 10)
-            });
+            // Appel au modèle simplifié
+            const client = await Auth.register({ email, password, nom });
 
-            // Redirection vers /login avec message de succès
-            res.redirect('/login?success=Inscription réussie ! Vous pouvez maintenant vous connecter');
+            // Rediriger vers login avec message
+            res.redirect('/auth/login?success=Inscription réussie ! Vous pouvez maintenant vous connecter');
+
         } catch (error) {
             console.error('Erreur lors de l\'inscription:', error);
 
             let errorMessage = 'Une erreur est survenue lors de l\'inscription';
-            if (error instanceof AuthError) {
-                errorMessage = error.message;
-            }
+            if (error instanceof AuthError) errorMessage = error.message;
 
             res.status(400).render('auth/register', {
                 title: 'Inscription',
                 error: errorMessage,
                 success: null,
                 formData: req.body
-            });
-        }
-    }
-
-    // Afficher le profil client
-    static async showProfile(req, res) {
-        try {
-            if (!req.session.clientId) {
-                return res.redirect('/login');
-            }
-
-            const client = await Auth.findById(req.session.clientId);
-            if (!client) {
-                req.session.destroy();
-                return res.redirect('/login');
-            }
-
-            const reservations = await client.getReservations();
-
-            res.render('auth/profile', {
-                title: 'Mon profil',
-                client: client,
-                reservations: reservations,
-                error: null,
-                success: req.query.success || null
-            });
-        } catch (error) {
-            console.error('Erreur affichage profil:', error);
-            res.status(500).render('error', {
-                message: 'Erreur lors de l\'affichage du profil',
-                error: error
             });
         }
     }

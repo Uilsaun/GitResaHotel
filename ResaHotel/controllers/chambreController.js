@@ -8,7 +8,9 @@ class ChambreController {
             const chambres = await Chambre.findAll();
             res.render('chambres/index', {
                 title: 'Hôtel California - Gestion des Chambres',
-                chambres
+                chambres,
+                success: req.query.success === 'true',  // ← AJOUTÉ
+                deleted: req.query.deleted === 'true'   // ← AJOUTÉ
             });
         } catch (error) {
             console.error('Erreur lors de la récupération des chambres :', error);
@@ -23,22 +25,22 @@ class ChambreController {
     static async showAvailable(req, res) {
         try {
             const { date_arrivee, date_depart, nb_personnes } = req.query;
-            
+
             let chambres;
             let hasDateFilter = false;
-            
+
             // Si des dates sont fournies, filtrer par disponibilité
             if (date_arrivee && date_depart) {
                 hasDateFilter = true;
                 chambres = await Chambre.findAvailable(
-                    date_arrivee, 
-                    date_depart, 
+                    date_arrivee,
+                    date_depart,
                     nb_personnes ? parseInt(nb_personnes) : null
                 );
             } else {
                 // Sinon, afficher toutes les chambres
                 chambres = await Chambre.findAll();
-                
+
                 // Filtrer par capacité si spécifiée
                 if (nb_personnes) {
                     const capacite = parseInt(nb_personnes);
@@ -46,7 +48,7 @@ class ChambreController {
                 }
             }
 
-            res.render('chambres/dispo', {
+            res.render('chambres/index', {
                 title: 'Chambres Disponibles - Hôtel California',
                 chambres,
                 filters: {

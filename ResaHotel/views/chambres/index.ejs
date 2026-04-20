@@ -1,92 +1,163 @@
-<!-- views/chambres/index.ejs -->
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
+    <title><%= title %></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
     <!-- Navigation -->
-    <div class="ui inverted menu navigation-menu">
-        <div class="ui container">
-            <a href="/" class="header item">
-                Hôtel California
-            </a>
-            <a href="/" class="item">Accueil</a>
-            <a href="/chambres" class="item">Gérer les chambres</a>
-            <a href="/contact" class="item">Contact</a>
-            <a href="/clients" class="item">Client</a>
-            <div class="right menu">
-                <a href="/auth/login" class="item">Connexion</a>
-            </div>
-        </div>
+    <div>
+        <%- include('../partials/navigation') %>
     </div>
 
-    <!-- Bouton vers l'index des clients -->
-    <div style="padding-top:80px; text-align: center;">
-        <a href="/clients" class="ui huge primary button">
-            👥 Gérer les Clients
-        </a>
-    </div>
+    <!-- Hero Section with Search -->
+    <div style="padding-top: 80px; min-height: 100vh; background: #f5f5f5;">
+        <div class="ui container" style="padding: 3rem 0;">
+            
+            <!-- Filtre de recherche -->
+            <div class="filter-section">
+                <h2 class="ui inverted header" style="text-align: center; margin-bottom: 2rem;">
+                    <i class="search icon"></i>
+                    Rechercher une chambre
+                </h2>
+                
+                <form class="ui form" action="/chambres/disponibles" method="GET">
+                    <div class="fields">
+                        <div class="five wide field">
+                            <label style="color: white;">Date d'arrivée</label>
+                            <input type="date" name="date_arrivee" 
+                                   value="<%= filters.date_arrivee %>" 
+                                   min="<%= new Date().toISOString().split('T')[0] %>">
+                        </div>
+                        <div class="five wide field">
+                            <label style="color: white;">Date de départ</label>
+                            <input type="date" name="date_depart" 
+                                   value="<%= filters.date_depart %>"
+                                   min="<%= new Date().toISOString().split('T')[0] %>">
+                        </div>
+                        <div class="four wide field">
+                            <label style="color: white;">Nombre de personnes</label>
+                            <select class="ui dropdown" name="nb_personnes">
+                                <option value="1" <%= filters.nb_personnes == 1 ? 'selected' : '' %>>1 personne</option>
+                                <option value="2" <%= filters.nb_personnes == 2 ? 'selected' : '' %>>2 personnes</option>
+                                <option value="3" <%= filters.nb_personnes == 3 ? 'selected' : '' %>>3 personnes</option>
+                                <option value="4" <%= filters.nb_personnes == 4 ? 'selected' : '' %>>4 personnes</option>
+                                <option value="5" <%= filters.nb_personnes == 5 ? 'selected' : '' %>>5 personnes</option>
+                                <option value="6" <%= filters.nb_personnes == 6 ? 'selected' : '' %>>6 personnes</option>
+                            </select>
+                        </div>
+                        <div class="two wide field" style="display: flex; align-items: flex-end;">
+                            <button class="ui primary fluid button" type="submit">
+                                <i class="search icon"></i> Rechercher
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
-    <!-- Hero Section -->
-    <div class="hero-section" style="padding-top: 120px; padding-bottom: 50px; background: #f9f9f9;">
-        <div class="ui container">
-            <h1 class="ui header">🏨 Gestion des Chambres</h1>
-
-            <% if (chambres.length===0) { %>
-                <div class="ui message">
-                    <div class="header">Aucune chambre trouvée</div>
-                    <p>Ajoutez une chambre pour commencer.</p>
-                </div>
-                <% } else { %>
-                    <table class="ui celled table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Numéro</th>
-                                <th>Capacité</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% chambres.forEach(chambre=> { %>
-                                <tr>
-                                    <td>
-                                        <%= chambre.id %>
-                                    </td>
-                                    <td>
-                                        <%= chambre.numero %>
-                                    </td>
-                                    <td>
-                                        <%= chambre.capacite %> pers.
-                                    </td>
-                                    <td>
-                                        <a href="/chambres/edit/<%= chambre.id %>"
-                                            class="item">✎</a>
-                                        <a href="/chambres/delete/<%= chambre.id %>"
-                                            class="item">🗑</a>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-                    <% } %>
-
-                        <a href="/chambres/create" class="ui primary button" style="margin-top: 20px;">
-                            ➕ Ajouter une chambre
+                <% if (filters.date_arrivee && filters.date_depart) { %>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="/chambres/disponibles" class="ui inverted basic button">
+                            <i class="close icon"></i> Effacer les filtres
                         </a>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- En-tête des résultats -->
+            <div class="ui segment" style="background: white; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 class="ui header">
+                    <i class="bed icon"></i>
+                    <div class="content">
+                        <%= hasDateFilter ? 'Chambres Disponibles' : 'Toutes nos Chambres' %>
+                        <div class="sub header">
+                            <% if (hasDateFilter) { %>
+                                Du <%= new Date(filters.date_arrivee).toLocaleDateString('fr-FR') %> 
+                                au <%= new Date(filters.date_depart).toLocaleDateString('fr-FR') %>
+                            <% } else { %>
+                                Découvrez notre sélection complète
+                            <% } %>
+                        </div>
+                    </div>
+                </h2>
+            </div>
+
+            <!-- Liste des chambres -->
+            <% if (chambres.length === 0) { %>
+                <div class="ui warning message" style="margin-top: 2rem;">
+                    <div class="header">
+                        <i class="inbox icon"></i>
+                        Aucune chambre disponible
+                    </div>
+                    <p>
+                        <% if (hasDateFilter) { %>
+                            Malheureusement, aucune chambre n'est disponible pour les dates sélectionnées. 
+                            Essayez de modifier vos dates ou le nombre de personnes.
+                        <% } else { %>
+                            Il n'y a actuellement aucune chambre dans notre système.
+                        <% } %>
+                    </p>
+                </div>
+            <% } else { %>
+                <div class="ui success message" style="margin-top: 2rem;">
+                    <i class="check circle icon"></i>
+                    <strong><%= chambres.length %></strong> chambre(s) 
+                    <%= hasDateFilter ? 'disponible(s)' : 'au total' %>
+                </div>
+
+                <div class="ui three stackable cards" style="margin-top: 2rem;">
+                    <% chambres.forEach(chambre => { %>
+                        <div class="ui card room-card">
+                            <div class="content">
+                                <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span>Chambre <%= chambre.numero %></span>
+                                    <div class="ui violet label">
+                                        <i class="users icon"></i>
+                                        <%= chambre.capacite %> pers.
+                                    </div>
+                                </div>
+                                <div class="meta" style="margin-top: 1rem;">
+                                    <span class="date">
+                                        <i class="bed icon"></i>
+                                        Capacité maximale : <%= chambre.capacite %> personne(s)
+                                    </span>
+                                </div>
+                                <div class="description" style="margin-top: 1rem;">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="check circle icon green"></i>
+                                            <div class="content">Wi-Fi gratuit</div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="check circle icon green"></i>
+                                            <div class="content">Télévision HD</div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="check circle icon green"></i>
+                                            <div class="content">Salle de bain privée</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <a href="/reservations/create?chambre_id=<%= chambre.id %>&date_arrivee=<%= filters.date_arrivee %>&date_depart=<%= filters.date_depart %>" 
+                                   class="ui primary fluid button">
+                                    <i class="calendar check icon"></i>
+                                    Réserver maintenant
+                                </a>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
         </div>
     </div>
 
     <!-- Footer -->
-    <div class="footer" style="background: #1a1a2e; color: #fff; padding: 50px 0;">
+    <div class="footer">
         <div class="ui container">
             <div class="ui four column stackable grid">
                 <div class="column">
@@ -96,29 +167,35 @@
                 <div class="column">
                     <h4>Liens Rapides</h4>
                     <div class="ui link list">
-                        <a href="/chambres" class="item">Nos Chambres</a>
-                        <a class="item">Services</a>
-                        <a class="item">Réservation</a>
-                        <a class="item">Contact</a>
+                        <a href="/chambres/disponibles" class="item">Nos Chambres</a>
+                        <a href="/service" class="item">Service</a>
+                        <a href="/contact" class="item">Contact</a>
+                        <a href="/clients" class="item">Client</a>
                     </div>
                 </div>
                 <div class="column">
                     <h4>Contact</h4>
-                    <p>📍 123 Avenue du Luxe, Paris<br>
-                        📞 +33 1 23 45 67 89<br>
-                        📧 contact@hotel-california.fr</p>
+                    <p>📍 30 r Louise Michel, 38000 Grenoble<br>
+                        📞 04 38 12 36 00<br>
+                        📧 Kwentinsaundev@hotelcalifornia.fr</p>
                 </div>
                 <div class="column">
                     <h4>Suivez-nous</h4>
-                    <div class="ui huge icons">
-                        <i class="facebook icon" style="cursor: pointer; margin-right: 15px;"></i>
-                        <i class="instagram icon" style="cursor: pointer; margin-right: 15px;"></i>
-                        <i class="twitter icon" style="cursor: pointer;"></i>
+                    <div class="ui huge icons social-icons">
+                        <a href="https://www.facebook.com/login.php" target="_blank">
+                            <i class="facebook icon"></i>
+                        </a>
+                        <a href="https://www.instagram.com">
+                            <i class="instagram icon"></i>
+                        </a>
+                        <a href="https://x.com">
+                            <i class="x icon"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="ui divider" style="margin-top: 40px;"></div>
-            <div style="text-align: center; padding: 20px 0;">
+            <div class="ui divider"></div>
+            <div class="footer-bottom">
                 <p>© 2025 Hôtel California. Tous droits réservés.</p>
             </div>
         </div>
@@ -128,6 +205,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
     <script>
         $('.ui.dropdown').dropdown();
+
+        // Validation des dates
+        const today = new Date().toISOString().split('T')[0];
+        const arrivalInput = document.querySelector('input[name="date_arrivee"]');
+        const departureInput = document.querySelector('input[name="date_depart"]');
+
+        if (arrivalInput && departureInput) {
+            arrivalInput.addEventListener('change', function() {
+                departureInput.setAttribute('min', this.value);
+                if (departureInput.value && departureInput.value <= this.value) {
+                    departureInput.value = '';
+                }
+            });
+        }
     </script>
 </body>
 
