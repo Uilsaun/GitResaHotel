@@ -9,13 +9,13 @@ const isAuthenticated = (req, res, next) => {
     if (req.session && req.session.clientId) {
         return next();
     }
-    res.redirect('/login');
+    res.redirect('/auth/login');
 };
 
 // Middleware pour vérifier si le client n'est PAS connecté
 const isNotAuthenticated = (req, res, next) => {
     if (req.session && req.session.clientId) {
-        return res.redirect('/dashboard');
+        return res.redirect('/auth/profile');
     }
     next();
 };
@@ -28,6 +28,7 @@ router.get('/register', isNotAuthenticated, AuthController.showRegisterPage);
 router.post('/register', isNotAuthenticated, AuthController.register);
 
 // Routes protégées (nécessite une connexion)
+router.get('/profile', isAuthenticated, AuthController.showProfilePage);
 router.post('/profile', isAuthenticated, AuthController.updateProfile);
 router.post('/change-password', isAuthenticated, AuthController.changePassword);
 

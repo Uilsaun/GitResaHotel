@@ -61,6 +61,14 @@
 </div>
 
 <script>
-    // Initialiser le dropdown Semantic UI pour le menu utilisateur
-    $('.ui.dropdown').dropdown();
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof $ !== 'undefined') {
+            $('.ui.dropdown').dropdown();
+        } else {
+            // Attendre que jQuery soit chargé
+            window.addEventListener('load', function() {
+                $('.ui.dropdown').dropdown();
+            });
+        }
+    });
 </script>
