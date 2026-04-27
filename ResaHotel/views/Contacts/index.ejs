@@ -5,75 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
-    <link rel="stylesheet" href="/css/stylecontact.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <!-- Navigation (même que la page d'accueil) -->
-    <div class="ui inverted menu" style="margin: 0; border-radius: 0; background: rgba(26, 26, 46, 0.95); position: fixed; width: 100%; z-index: 1000; backdrop-filter: blur(10px);">
+    <%- include('../partials/navigation') %>
+
+    <!-- Hero -->
+    <div class="clients-hero" style="padding-top: 100px; padding-bottom: 30px; padding-left: 2rem;">
         <div class="ui container">
-            <a href="/" class="header item" style="font-size: 1.3rem; font-weight: 300;">
-                ✨ Hôtel California
-            </a>
-            <a href="/" class="item">Accueil</a>
-            <a href="/chambres" class="item">Gérer les chambres</a>
-            <a href="/service" class="item">Services</a>
-            <a href="/contact" class="item active">Contact</a>
-            <a href="/clients" class="item">Client</a>
-            <div class="right menu">
-                <a class="item">
-                    <i class="user icon"></i> Connexion
-                </a>
-            </div>
+            <h1 class="clients-hero h1">
+                <i class="address book icon" style="color: #667eea;"></i>
+                Gestion des Contacts
+            </h1>
+            <p>Gérez vos partenaires et fournisseurs</p>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <div class="contacts-hero">
-        <h1>🏢Gestion des Contacts</h1>
-        <p>Gérez vos partenaires et fournisseurs</p>
-    </div>
+    <!-- Contenu principal -->
+    <div class="ui container" style="margin-top: 2rem; margin-bottom: 80px;">
 
-    <!-- Container principal -->
-    <div class="contacts-container">
-        
-        <!-- Bouton Ajouter -->
-        <a href="/contact/create" class="btn-add-contact">
-            ➕ Ajouter un contact
+        <!-- Bouton ajouter -->
+        <a href="/contact/create" class="ui primary button" style="margin-bottom: 1.5rem; display: inline-block;">
+            <i class="plus icon"></i> Ajouter un contact
         </a>
 
-        <!-- Table Container -->
-        <div class="contacts-table-container">
-            <h2>📋 Liste des contacts</h2>
-            
+        <!-- Tableau -->
+        <div class="clients-table-container">
+            <h2 style="margin: 0 0 16px 0; font-size: 1.1rem; color: #111827;">
+                <i class="list icon" style="color: #667eea;"></i> Liste des contacts
+            </h2>
+
             <% if (contacts.length === 0) { %>
                 <div class="empty-state">
-                    <div class="icon">📭</div>
+                    <div style="font-size: 2.5rem; margin-bottom: 12px; color: #d1d5db;">
+                        <i class="inbox icon"></i>
+                    </div>
                     <h3>Aucun contact trouvé</h3>
                     <p>Commencez par ajouter votre premier contact</p>
                 </div>
             <% } else { %>
-                <ul>
-                    <% contacts.forEach(c => { %>
-                        <li>
-                            <div class="contact-avatar">
-                                <%= (c.nom_entreprise || c.nom).charAt(0).toUpperCase() %>
-                            </div>
-                            <strong><%= c.nom_entreprise || c.nom %></strong>
-                            <span>📧 <%= c.email %></span>
-                            <span>📞 <%= c.telephone %></span>
-                            <div class="action-buttons">
-                                <a href="/contact/<%= c.id %>/edit">✏️ Modifier</a>
-                                <a href="/contact/<%= c.id %>/delete">🗑️ Supprimer</a>
-                            </div>
-                        </li>
-                    <% }) %>
-                </ul>
+                <table class="clients-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;"></th>
+                            <th>Nom / Entreprise</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Type</th>
+                            <th style="width: 180px; text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% contacts.forEach(c => { %>
+                            <tr>
+                                <td>
+                                    <div class="client-avatar">
+                                        <%= (c.nom_entreprise || c.nom).charAt(0).toUpperCase() %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong><%= c.nom_entreprise || c.nom %></strong>
+                                </td>
+                                <td style="color: #6b7280;"><%= c.email %></td>
+                                <td style="color: #6b7280;"><%= c.telephone %></td>
+                                <td>
+                                    <% if (c.type_sponsor) { %>
+                                        <span class="ui tiny label" style="background: #ede9fe; color: #5b21b6; border: none;">
+                                            <%= c.type_sponsor %>
+                                        </span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a class="ui mini primary button" href="/contact/<%= c.id %>/edit">
+                                            <i class="edit icon"></i> Modifier
+                                        </a>
+                                        <a class="ui mini red button" href="/contact/<%= c.id %>/delete">
+                                            <i class="trash icon"></i> Supprimer
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
             <% } %>
         </div>
     </div>
 
-    <!-- Footer (même que la page d'accueil) -->
-    <div class="footer" style="background: rgba(26, 26, 46, 0.95); color: white; padding: 60px 0 20px; margin-top: 80px;">
+    <!-- Footer -->
+    <div class="footer">
         <div class="ui container">
             <div class="ui four column stackable grid">
                 <div class="column">
@@ -83,35 +104,31 @@
                 <div class="column">
                     <h4>Liens Rapides</h4>
                     <div class="ui link list">
-                        <a href="/chambres" class="item">Nos Chambres</a>
+                        <a href="/chambres/disponibles" class="item">Nos Chambres</a>
                         <a href="/service" class="item">Service</a>
                         <a href="/contact" class="item">Contact</a>
-                        <a href="/clients" class="item">Client</a>   
+                        <a href="/clients" class="item">Client</a>
                     </div>
                 </div>
                 <div class="column">
                     <h4>Contact</h4>
-                    <p>📍 30 r Louise Michel, 38000 Grenoble<br>
-                        📞 04 38 12 36 00<br>
-                        📧 contact@hotelcalifornia.fr</p>
+                    <p>
+                        <i class="map marker alternate icon"></i> 30 r Louise Michel, 38000 Grenoble<br>
+                        <i class="phone icon"></i> 04 38 12 36 00<br>
+                        <i class="mail icon"></i> contact@hotelcalifornia.fr
+                    </p>
                 </div>
                 <div class="column">
                     <h4>Suivez-nous</h4>
-                    <div class="ui huge icons">
-                        <a href="https://www.facebook.com" target="_blank">
-                            <i class="facebook icon" style="cursor: pointer; margin-right: 15px;"></i>
-                        </a>
-                        <a href="https://www.instagram.com" target="_blank">
-                            <i class="instagram icon" style="cursor: pointer; margin-right: 15px;"></i>
-                        </a>
-                        <a href="https://x.com" target="_blank">
-                            <i class="x icon" style="cursor: pointer;"></i>
-                        </a>
+                    <div class="ui huge icons social-icons">
+                        <a href="https://www.facebook.com" target="_blank"><i class="facebook icon"></i></a>
+                        <a href="https://www.instagram.com" target="_blank"><i class="instagram icon"></i></a>
+                        <a href="https://x.com" target="_blank"><i class="x icon"></i></a>
                     </div>
                 </div>
             </div>
-            <div class="ui divider" style="margin-top: 40px;"></div>
-            <div style="text-align: center; padding: 20px 0;">
+            <div class="ui divider"></div>
+            <div class="footer-bottom">
                 <p>© 2025 Hôtel California. Tous droits réservés.</p>
             </div>
         </div>

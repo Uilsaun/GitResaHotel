@@ -1,0 +1,370 @@
+<!-- views/reservations/create.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <div class="ui inverted menu navigation-menu">
+        <div><a class="header item no-hover">
+                🏨 Hôtel California
+            </a>
+        </div>
+        <div class="ui container">
+            <a href="/" class="ui black button"
+                style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Accueil</a>
+            <a href="/chambres/disponibles" class="ui black button"
+                style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Nos Chambres</a>
+            <a href="/contact" class="ui black button"
+                style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Contact</a>
+
+            <% if (user) { %>
+                <a href="/reservations" class="ui black button"
+                    style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Mes Réservations</a>
+                <% } %>
+
+                    <div class="right menu">
+                        <% if (user) { %>
+                            <!-- Menu utilisateur connecté avec avatar -->
+                            <div class="ui dropdown item" style="padding: 0.5rem 1rem;">
+                                <div style="display: flex; align-items: center;">
+                                    <!-- Avatar avec initiale -->
+                                    <div
+                                        style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; margin-right: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                        <%= user.initiale %>
+                                    </div>
+                                    <span>
+                                        <%= user.nom %>
+                                    </span>
+                                    <i class="dropdown icon"></i>
+                                </div>
+                                <div class="menu">
+                                    <a href="/auth/profile" class="item">
+                                        <i class="user icon"></i> Mon Profil
+                                    </a>
+                                    <a href="/reservations" class="item">
+                                        <i class="calendar icon"></i> Mes Réservations
+                                    </a>
+                                    <div class="divider"></div>
+                                    <a href="/auth/logout" class="item">
+                                        <i class="sign out icon"></i> Déconnexion
+                                    </a>
+                                </div>
+                            </div>
+                            <% } else { %>
+                                <!-- Boutons si non connecté -->
+                                <a href="/auth/login" class="item"
+                                    style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">
+                                    <i class="sign in icon"></i> Connexion
+                                </a>
+                                <a href="/auth/register" class="ui black button"
+                                    style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">
+                                    Inscription
+                                </a>
+                                <% } %>
+                    </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialiser le dropdown Semantic UI pour le menu utilisateur
+        $('.ui.dropdown').dropdown();
+    </script>
+
+    <!-- Contenu principal -->
+    <div style="padding-top: 80px; min-height: 100vh; background: #f5f5f5;">
+        <div class="ui container" style="padding: 3rem 0;">
+
+            <!-- Breadcrumb -->
+            <div class="ui breadcrumb">
+                <a href="/" class="section">Accueil</a>
+                <div class="divider"> / </div>
+                <a href="/chambres/disponibles" class="section">Chambres disponibles</a>
+                <div class="divider"> / </div>
+                <div class="active section">Nouvelle réservation</div>
+            </div>
+
+            <!-- En-tête -->
+            <div class="ui segment"
+                style="background: white; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 2rem;">
+                <h2 class="ui header">
+                    <i class="calendar plus icon"></i>
+                    <div class="content">
+                        Nouvelle Réservation
+                        <div class="sub header">
+                            Confirmez votre réservation en quelques clics
+                        </div>
+                    </div>
+                </h2>
+            </div>
+
+            <!-- Messages d'erreur -->
+            <% if (typeof errors !=='undefined' && errors && errors.length> 0) { %>
+                <div class="ui negative message" style="margin-top: 2rem;">
+                    <div class="header">
+                        <i class="exclamation triangle icon"></i>
+                        Erreur lors de la réservation
+                    </div>
+                    <ul class="list">
+                        <% for (let i=0; i < errors.length; i++) { %>
+                            <li>
+                                <%= errors[i].msg %>
+                            </li>
+                            <% } %>
+                    </ul>
+                </div>
+                <% } %>
+
+                    <!-- Message si téléphone requis -->
+                    <% if (needsPhone) { %>
+                        <div class="ui warning message" style="margin-top: 2rem;">
+                            <div class="header">
+                                <i class="phone icon"></i>
+                                Informations complémentaires requises
+                            </div>
+                            <p>Pour finaliser votre réservation, nous avons besoin de votre numéro de téléphone.</p>
+                        </div>
+                        <% } %>
+
+                            <!-- Informations du client connecté -->
+                            <div class="ui info message" style="margin-top: 2rem;">
+                                <div class="header">
+                                    <i class="user icon"></i>
+                                    Réservation au nom de
+                                </div>
+                                <p>
+                                    <strong>
+                                        <%= client.nom %>
+                                    </strong><br>
+                                    <i class="mail icon"></i>
+                                    <%= client.email %>
+                                        <% if (client.telephone && client.telephone !=='null' ) { %>
+                                            <br><i class="phone icon"></i>
+                                            <%= client.telephone %>
+                                                <% } %>
+                                </p>
+                            </div>
+
+                            <!-- Informations de la chambre sélectionnée -->
+                            <% if (chambre) { %>
+                                <div class="ui teal message" style="margin-top: 1rem;">
+                                    <div class="header">
+                                        <i class="bed icon"></i>
+                                        Chambre sélectionnée
+                                    </div>
+                                    <p>
+                                        <strong>Chambre n° <%= chambre.numero %></strong> -
+                                        Capacité : <%= chambre.capacite %> personne(s)
+                                    </p>
+                                    <% if (filters.date_arrivee && filters.date_depart) { %>
+                                        <p>
+                                            <i class="calendar icon"></i>
+                                            Du <%= new Date(filters.date_arrivee).toLocaleDateString('fr-FR') %>
+                                                au <%= new Date(filters.date_depart).toLocaleDateString('fr-FR') %>
+                                        </p>
+                                        <% } %>
+                                </div>
+                                <% } %>
+
+                                    <!-- Formulaire de réservation -->
+                                    <div class="ui segment" style="margin-top: 2rem;">
+                                        <form class="ui form" action="/reservations/create" method="POST">
+
+                                            <!-- Si téléphone manquant, le demander -->
+                                            <% if (needsPhone) { %>
+                                                <h3 class="ui dividing header">
+                                                    <i class="phone icon"></i>
+                                                    Informations de contact
+                                                </h3>
+
+                                                <div class="required field">
+                                                    <label>
+                                                        <i class="phone icon"></i>
+                                                        Numéro de téléphone
+                                                    </label>
+                                                    <input type="tel" name="telephone" placeholder="06 12 34 56 78"
+                                                        pattern="^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$"
+                                                        required>
+                                                    <div class="ui pointing label"
+                                                        style="margin-top: 5px; border: none; background: transparent; color: #999; font-size: 0.9em;">
+                                                        Format : 06 12 34 56 78 ou +33 6 12 34 56 78
+                                                    </div>
+                                                </div>
+
+                                                <div class="required field">
+                                                    <label>
+                                                        <i class="users icon"></i>
+                                                        Nombre de personnes
+                                                    </label>
+                                                    <select class="ui dropdown" name="nombre_personnes" required>
+                                                        <option value="">Choisir...</option>
+                                                        <option value="1">1 personne</option>
+                                                        <option value="2" selected>2 personnes</option>
+                                                        <option value="3">3 personnes</option>
+                                                        <option value="4">4 personnes</option>
+                                                        <option value="5">5 personnes</option>
+                                                        <option value="6">6+ personnes</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="ui divider"></div>
+                                                <% } %>
+
+                                                    <!-- Chambre (lecture seule) -->
+                                                    <h3 class="ui dividing header">
+                                                        <i class="bed icon"></i>
+                                                        Détails de la réservation
+                                                    </h3>
+
+                                                    <div class="required field">
+                                                        <label>Chambre</label>
+                                                        <% if (chambre) { %>
+                                                            <input type="hidden" name="chambre_id"
+                                                                value="<%= chambre.id %>">
+                                                            <div class="ui segment">
+                                                                <div class="ui violet ribbon label">Chambre <%=
+                                                                        chambre.numero %>
+                                                                </div>
+                                                                <p style="margin-top: 1rem;">
+                                                                    <i class="users icon"></i> Capacité : <%=
+                                                                        chambre.capacite %> personne(s)
+                                                                </p>
+                                                            </div>
+                                                            <% } else { %>
+                                                                <p class="ui negative message">
+                                                                    Aucune chambre sélectionnée. <a
+                                                                        href="/chambres/disponibles">Retour à la
+                                                                        recherche</a>
+                                                                </p>
+                                                                <% } %>
+                                                    </div>
+
+                                                    <!-- Dates de réservation -->
+                                                    <div class="two fields">
+                                                        <div class="required field">
+                                                            <label>
+                                                                <i class="calendar icon"></i>
+                                                                Date d'arrivée
+                                                            </label>
+                                                            <input type="date" name="date_arrivee"
+                                                                value="<%= filters.date_arrivee %>"
+                                                                min="<%= new Date().toISOString().split('T')[0] %>"
+                                                                required>
+                                                        </div>
+                                                        <div class="required field">
+                                                            <label>
+                                                                <i class="calendar icon"></i>
+                                                                Date de départ
+                                                            </label>
+                                                            <input type="date" name="date_depart"
+                                                                value="<%= filters.date_depart %>"
+                                                                min="<%= new Date().toISOString().split('T')[0] %>"
+                                                                required>
+                                                        </div>
+                                                    </div>
+
+                                                    <% if (filters.date_arrivee && filters.date_depart) { %>
+                                                        <div class="ui info message">
+                                                            <% const dateArrivee=new Date(filters.date_arrivee); const
+                                                                dateDepart=new Date(filters.date_depart); const
+                                                                duree=Math.ceil((dateDepart - dateArrivee) / (1000 * 60
+                                                                * 60 * 24)); %>
+                                                                <i class="info circle icon"></i>
+                                                                Durée du séjour : <strong>
+                                                                    <%= duree %> nuit<%= duree> 1 ? 's' : '' %>
+                                                                </strong>
+                                                        </div>
+                                                        <% } %>
+
+                                                            <div class="ui divider"></div>
+
+                                                            <!-- Boutons d'action -->
+                                                            <div class="field" style="text-align: right;">
+                                                                <a href="/chambres/disponibles" class="ui button">
+                                                                    <i class="cancel icon"></i> Annuler
+                                                                </a>
+                                                                <button class="ui primary button" type="submit">
+                                                                    <i class="check icon"></i> Confirmer la
+                                                                    réservation
+                                                                </button>
+                                                            </div>
+                                        </form>
+                                    </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="ui container">
+            <div class="ui four column stackable grid">
+                <div class="column">
+                    <h4>À Propos</h4>
+                    <p>Hôtel California, votre destination de luxe pour des séjours inoubliables.</p>
+                </div>
+                <div class="column">
+                    <h4>Liens Rapides</h4>
+                    <div class="ui link list">
+                        <a href="/chambres/disponibles" class="item">Nos Chambres</a>
+                        <a href="/service" class="item">Service</a>
+                        <a href="/contact" class="item">Contact</a>
+                    </div>
+                </div>
+                <div class="column">
+                    <h4>Contact</h4>
+                    <p>📍 30 r Louise Michel, 38000 Grenoble<br>
+                        📞 04 38 12 36 00<br>
+                        📧 Kwentinsaundev@hotelcalifornia.fr</p>
+                </div>
+                <div class="column">
+                    <h4>Suivez-nous</h4>
+                    <div class="ui huge icons social-icons">
+                        <a href="https://www.facebook.com/login.php" target="_blank">
+                            <i class="facebook icon"></i>
+                        </a>
+                        <a href="https://www.instagram.com">
+                            <i class="instagram icon"></i>
+                        </a>
+                        <a href="https://x.com">
+                            <i class="x icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="footer-bottom">
+                <p>© 2025 Hôtel California. Tous droits réservés.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+    <script>
+        // Initialiser les dropdowns Semantic UI
+        $('.ui.dropdown').dropdown();
+
+        // Validation des dates
+        const arrivalInput = document.querySelector('input[name="date_arrivee"]');
+        const departureInput = document.querySelector('input[name="date_depart"]');
+
+        if (arrivalInput && departureInput) {
+            arrivalInput.addEventListener('change', function () {
+                departureInput.setAttribute('min', this.value);
+                if (departureInput.value && departureInput.value <= this.value) {
+                    departureInput.value = '';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

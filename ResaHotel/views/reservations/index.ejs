@@ -1,0 +1,206 @@
+<!-- views/reservations/index.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%- include('../partials/navigation') %>
+
+    <!-- Contenu principal -->
+    <div style="padding-top: 80px; min-height: 100vh; background: #f5f5f5;">
+        <div class="ui container" style="padding: 3rem 0;">
+            
+            <!-- Messages de succès/suppression -->
+            <% if (success) { %>
+                <div class="ui success message">
+                    <i class="check circle icon"></i>
+                    La réservation a été créée avec succès !
+                </div>
+            <% } %>
+            
+            <% if (deleted) { %>
+                <div class="ui info message">
+                    <i class="trash icon"></i>
+                    La réservation a été supprimée avec succès.
+                </div>
+            <% } %>
+
+            <!-- En-tête -->
+            <div class="ui segment" style="background: white; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 class="ui header">
+                    <i class="calendar alternate outline icon"></i>
+                    <div class="content">
+                        Gestion des Réservations
+                        <div class="sub header">
+                            Liste de toutes les réservations de l'hôtel
+                        </div>
+                    </div>
+                </h2>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div style="margin: 2rem 0;">
+                <a href="/chambres/disponibles" class="ui primary button">
+                    <i class="plus icon"></i> Nouvelle Réservation
+                </a>
+                <a href="/reservations" class="ui button">
+                    <i class="refresh icon"></i> Actualiser
+                </a>
+            </div>
+
+            <!-- Liste des réservations -->
+            <% if (reservations.length === 0) { %>
+                <div class="ui warning message">
+                    <div class="header">
+                        <i class="inbox icon"></i>
+                        Aucune réservation
+                    </div>
+                    <p>Il n'y a actuellement aucune réservation dans le système.</p>
+                    <a href="/chambres/disponibles" class="ui primary button" style="margin-top: 1rem;">
+                        <i class="plus icon"></i> Créer une réservation
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="ui info message">
+                    <i class="info circle icon"></i>
+                    <strong><%= reservations.length %></strong> réservation(s) au total
+                </div>
+
+                <table class="ui celled striped table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Client</th>
+                            <th>Contact</th>
+                            <th>Chambre</th>
+                            <th>Date d'arrivée</th>
+                            <th>Date de départ</th>
+                            <th>Durée</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservations.forEach(reservation => { 
+                            const dateArrivee = new Date(reservation.date_arrivee);
+                            const dateDepart = new Date(reservation.date_depart);
+                            const duree = Math.ceil((dateDepart - dateArrivee) / (1000 * 60 * 60 * 24));
+                            const aujourdhui = new Date();
+                            aujourdhui.setHours(0, 0, 0, 0);
+                            
+                            let statusClass = '';
+                            let statusIcon = '';
+                            let statusText = '';
+                            
+                            if (dateDepart < aujourdhui) {
+                                statusClass = 'disabled';
+                                statusIcon = 'check circle';
+                                statusText = 'Terminée';
+                            } else if (dateArrivee <= aujourdhui && dateDepart >= aujourdhui) {
+                                statusClass = 'positive';
+                                statusIcon = 'hotel';
+                                statusText = 'En cours';
+                            } else {
+                                statusClass = 'warning';
+                                statusIcon = 'clock outline';
+                                statusText = 'À venir';
+                            }
+                        %>
+                            <tr class="<%= statusClass %>">
+                                <td><%= reservation.id %></td>
+                                <td>
+                                    <i class="user icon"></i>
+                                    <%= reservation.client_nom %>
+                                </td>
+                                <td>
+                                    <div><i class="mail icon"></i> <%= reservation.client_email %></div>
+                                    <div><i class="phone icon"></i> <%= reservation.client_telephone %></div>
+                                </td>
+                                <td>
+                                    <div class="ui violet label">
+                                        <i class="bed icon"></i>
+                                        Chambre <%= reservation.chambre_numero %>
+                                    </div>
+                                    <div style="margin-top: 5px; font-size: 0.9em; color: #666;">
+                                        <i class="users icon"></i> <%= reservation.chambre_capacite %> pers.
+                                    </div>
+                                </td>
+                                <td><%= dateArrivee.toLocaleDateString('fr-FR') %></td>
+                                <td><%= dateDepart.toLocaleDateString('fr-FR') %></td>
+                                <td>
+                                    <div><%= duree %> nuit<%= duree > 1 ? 's' : '' %></div>
+                                    <div style="margin-top: 5px;">
+                                        <i class="<%= statusIcon %> icon"></i>
+                                        <span style="font-size: 0.9em;"><%= statusText %></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="/reservations/delete/<%= reservation.id %>" class="ui red mini button">
+                                        <i class="trash icon"></i> Supprimer
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="ui container">
+            <div class="ui four column stackable grid">
+                <div class="column">
+                    <h4>À Propos</h4>
+                    <p>Hôtel California, votre destination de luxe pour des séjours inoubliables.</p>
+                </div>
+                <div class="column">
+                    <h4>Liens Rapides</h4>
+                    <div class="ui link list">
+                        <a href="/chambres/disponibles" class="item">Nos Chambres</a>
+                        <a href="/service" class="item">Service</a>
+                        <a href="/contact" class="item">Contact</a>
+                        <a href="/clients" class="item">Client</a>
+                    </div>
+                </div>
+                <div class="column">
+                    <h4>Contact</h4>
+                    <p>📍 30 r Louise Michel, 38000 Grenoble<br>
+                        📞 04 38 12 36 00<br>
+                        📧 Kwentinsaundev@hotelcalifornia.fr</p>
+                </div>
+                <div class="column">
+                    <h4>Suivez-nous</h4>
+                    <div class="ui huge icons social-icons">
+                        <a href="https://www.facebook.com/login.php" target="_blank">
+                            <i class="facebook icon"></i>
+                        </a>
+                        <a href="https://www.instagram.com">
+                            <i class="instagram icon"></i>
+                        </a>
+                        <a href="https://x.com">
+                            <i class="x icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="footer-bottom">
+                <p>© 2025 Hôtel California. Tous droits réservés.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+</body>
+
+</html>

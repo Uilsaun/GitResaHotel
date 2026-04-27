@@ -3,15 +3,42 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
     <link rel="stylesheet" href="/style.css">
+    <style>
+        .room-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .filter-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+    </style>
 </head>
 
 <body>
     <!-- Navigation -->
-    <div>
-        <%- include('../partials/navigation') %>
+    <div class="ui inverted menu navigation-menu">
+        <div class="ui container">
+            <a href="/" class="header item">
+                Hôtel California
+            </a>
+            <a href="/" class="item">Accueil</a>
+            <a href="/chambres" class="item">Gérer les chambres</a>
+            <a href="/contact" class="item">Contact</a>
+            <a href="/clients" class="item">Client</a>
+            <div class="right menu">
+                <a href="/auth/login" class="item">Connexion</a>
+            </div>
+        </div>
     </div>
 
     <!-- Hero Section with Search -->
@@ -50,6 +77,7 @@
                                 <option value="6" <%= filters.nb_personnes == 6 ? 'selected' : '' %>>6 personnes</option>
                             </select>
                         </div>
+                        
                         <div class="two wide field" style="display: flex; align-items: flex-end;">
                             <button class="ui primary fluid button" type="submit">
                                 <i class="search icon"></i> Rechercher
@@ -143,11 +171,10 @@
                                 </div>
                             </div>
                             <div class="extra content">
-                                <a href="/reservations/create?chambre_id=<%= chambre.id %>&date_arrivee=<%= filters.date_arrivee %>&date_depart=<%= filters.date_depart %>" 
-                                   class="ui primary fluid button">
+                                <button class="ui primary fluid button">
                                     <i class="calendar check icon"></i>
                                     Réserver maintenant
-                                </a>
+                                </button>
                             </div>
                         </div>
                     <% }) %>

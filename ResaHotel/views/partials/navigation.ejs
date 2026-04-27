@@ -1,0 +1,74 @@
+<!-- views/partials/navigation.ejs -->
+<div class="ui inverted menu navigation-menu">
+    <div><a class="header item no-hover">
+            🏨 Hôtel California
+        </a>
+    </div>
+    <div class="ui container">
+        <a href="/" class="ui black button"
+            style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Accueil</a>
+        <a href="/chambres/disponibles" class="ui black button"
+            style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Nos Chambres</a>
+        <a href="/contact" class="ui black button"
+            style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Contact</a>
+
+        <% if (user) { %>
+            <a href="/reservations" class="ui black button"
+                style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Mes Réservations</a>
+            <% } %>
+
+                <div class="right menu">
+                    <% if (user) { %>
+                        <!-- Menu utilisateur connecté avec avatar -->
+                        <div class="ui dropdown item" style="padding: 0.5rem 1rem;">
+                            <div style="display: flex; align-items: center;">
+                                <!-- Avatar avec initiale -->
+                                <div
+                                    style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; margin-right: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                    <%= user.initiale %>
+                                </div>
+                                <span>
+                                    <%= user.nom %>
+                                </span>
+                                <i class="dropdown icon"></i>
+                            </div>
+                            <div class="menu">
+                                <a href="/auth/profile" class="item">
+                                    <i class="user icon"></i> Mon Profil
+                                </a>
+                                <a href="/reservations" class="item">
+                                    <i class="calendar icon"></i> Mes Réservations
+                                </a>
+                                <div class="divider"></div>
+                                <a href="/auth/logout" class="item">
+                                    <i class="sign out icon"></i> Déconnexion
+                                </a>
+                            </div>
+                        </div>
+                        <% } else { %>
+                            <!-- Boutons si non connecté -->
+                            <a href="/auth/login" class="item"
+                                style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">
+                                <i class="sign in icon"></i> Connexion
+                            </a>
+                            <a href="/auth/register" class="ui black button"
+                                style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">
+                                Inscription
+                            </a>
+                            <% } %>
+                </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof $ !== 'undefined') {
+            $('.ui.dropdown').dropdown();
+        } else {
+            // Attendre que jQuery soit chargé
+            window.addEventListener('load', function() {
+                $('.ui.dropdown').dropdown();
+            });
+        }
+    });
+</script>

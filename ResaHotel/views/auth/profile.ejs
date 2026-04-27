@@ -1,0 +1,417 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hôtel California</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif
+    }
+
+    .pg {
+        background: #f5f5f5;
+        min-height: 100vh
+    }
+
+    .hero {
+        background: #1a1a2e;
+        padding: 80px 0 0
+    }
+
+    .hero-inner {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 2rem 0
+    }
+
+    .hero-top {
+        display: flex;
+        align-items: flex-end;
+        gap: 28px;
+        padding-bottom: 0
+    }
+
+    .avatar-wrap {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        flex-shrink: 0
+    }
+
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #2d2d4e;
+        border: 3px solid #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #fff;
+        overflow: hidden
+    }
+
+    .avatar-edit {
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #667eea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 2px solid #fff
+    }
+
+    .avatar-edit svg {
+        width: 13px;
+        height: 13px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 2
+    }
+
+    .hero-name {
+        padding-bottom: 6px
+    }
+
+    .hero-name h1 {
+        color: #fff;
+        font-size: 1.7rem;
+        font-weight: 700;
+        line-height: 1.2
+    }
+
+    .hero-name p {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+        margin-top: 4px
+    }
+
+    .hero-tabs {
+        display: flex;
+        gap: 0;
+        margin-top: 28px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1)
+    }
+
+    .tab {
+        padding: 14px 24px;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        user-select: none
+    }
+
+    .tab.active {
+        color: #fff;
+        border-bottom: 2px solid #667eea
+    }
+
+    .body {
+        max-width: 960px;
+        margin: 32px auto 80px;
+        padding: 0 2rem
+    }
+
+    .section-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 14px
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        overflow: hidden
+    }
+
+    .card-row {
+        display: flex;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid #f3f4f6
+    }
+
+    .card-row:last-child {
+        border-bottom: none
+    }
+
+    .row-label {
+        font-size: 0.85rem;
+        color: #6b7280;
+        width: 130px;
+        flex-shrink: 0
+    }
+
+    .row-value {
+        font-size: 0.95rem;
+        color: #111827;
+        flex: 1
+    }
+
+    .row-value.muted {
+        color: #9ca3af;
+        font-style: italic
+    }
+
+    .row-action {
+        font-size: 0.82rem;
+        color: #667eea;
+        cursor: pointer;
+        font-weight: 600
+    }
+
+    .pw-section {
+        margin-top: 28px
+    }
+
+    .pw-toggle {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        overflow: hidden
+    }
+
+    .pw-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        cursor: pointer;
+        user-select: none
+    }
+
+    .pw-header span {
+        font-size: 0.95rem;
+        color: #111827;
+        font-weight: 600
+    }
+
+    .pw-header .arrow {
+        width: 18px;
+        height: 18px;
+        stroke: #9ca3af;
+        fill: none;
+        stroke-width: 2;
+        transition: transform 0.2s
+    }
+
+    .pw-body {
+        padding: 0 20px 20px;
+        border-top: 1px solid #f3f4f6;
+        display: none
+    }
+
+    .pw-body.open {
+        display: block
+    }
+
+    .field {
+        margin-top: 16px
+    }
+
+    .field label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em
+    }
+
+    .field input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 0.92rem;
+        color: #111827
+    }
+
+    .field input:focus {
+        outline: none;
+        border-color: #667eea
+    }
+
+    .field input:disabled {
+        background: #f9fafb;
+        color: #9ca3af
+    }
+
+    .save-btn {
+        margin-top: 20px;
+        padding: 10px 24px;
+        background: #1a1a2e;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer
+    }
+
+    .save-btn:hover {
+        background: #2d2d4e
+    }
+
+    .danger-zone {
+        margin-top: 28px
+    }
+
+    .danger-card {
+        background: #fff;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between
+    }
+
+    .danger-card p {
+        font-size: 0.9rem;
+        color: #374151
+    }
+
+    .danger-card p span {
+        display: block;
+        font-size: 0.8rem;
+        color: #9ca3af;
+        margin-top: 2px
+    }
+
+    .danger-btn {
+        padding: 8px 16px;
+        background: #fff;
+        border: 1.5px solid #ef4444;
+        border-radius: 8px;
+        color: #ef4444;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer
+    }
+</style>
+
+<body>
+    <%- include('../partials/navigation') %>
+
+        <div class="pg">
+            <div class="hero">
+                <div class="hero-inner">
+                    <div class="hero-top">
+                        <div class="avatar-wrap">
+                            <div class="avatar-circle">J</div>
+                            <div class="avatar-edit" title="Changer la photo">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="hero-name">
+                            <h1>Jean Luc</h1>
+                            <p>paypepa@zaza.fr</p>
+                        </div>
+                    </div>
+                    <div class="hero-tabs">
+                        <div class="tab active">Informations</div>
+                        <div class="tab">Sécurité</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="body">
+
+                <div class="section-label">Informations personnelles</div>
+                <div class="card">
+                    <div class="card-row">
+                        <span class="row-label">Nom complet</span>
+                        <span class="row-value">Jean Luc</span>
+                        <span class="row-action">Modifier</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="row-label">Adresse email</span>
+                        <span class="row-value">paypepa@zaza.fr</span>
+                        <span class="row-action">Modifier</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="row-label">Téléphone</span>
+                        <span class="row-value muted">Non renseigné</span>
+                        <span class="row-action">Ajouter</span>
+                    </div>
+                </div>
+
+                <div class="pw-section">
+                    <div class="section-label">Sécurité</div>
+                    <div class="pw-toggle" id="pwToggle">
+                        <div class="pw-header" onclick="togglePw()">
+                            <span>Changer le mot de passe</span>
+                            <svg class="arrow" id="pwArrow" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </div>
+                        <div class="pw-body" id="pwBody">
+                            <div class="field">
+                                <label>Mot de passe actuel</label>
+                                <input type="password" placeholder="••••••••">
+                            </div>
+                            <div class="field">
+                                <label>Nouveau mot de passe</label>
+                                <input type="password" placeholder="••••••••">
+                            </div>
+                            <div class="field">
+                                <label>Confirmer</label>
+                                <input type="password" placeholder="••••••••">
+                            </div>
+                            <button class="save-btn">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="danger-zone">
+                    <div class="section-label">Zone de danger</div>
+                    <div class="danger-card">
+                        <p>Supprimer le compte
+                            <span>Cette action est irréversible.</span>
+                        </p>
+                        <button class="danger-btn">Supprimer</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</body>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+
+
+<script>
+    function togglePw() {
+        const b = document.getElementById('pwBody');
+        const a = document.getElementById('pwArrow');
+        b.classList.toggle('open');
+        a.style.transform = b.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+</script>
