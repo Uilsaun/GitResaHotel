@@ -23,7 +23,8 @@ class ReservationController {
                 user: req.session.clientId ? {
                     id: req.session.clientId,
                     nom: req.session.clientNom,
-                    email: req.session.clientEmail
+                    email: req.session.clientEmail,
+                    initiale: req.session.clientNom ? req.session.clientNom.charAt(0).toUpperCase() : '?'
                 } : null
             });
         } catch (error) {
@@ -75,6 +76,7 @@ class ReservationController {
                     id: req.session.clientId,
                     nom: req.session.clientNom,
                     email: req.session.clientEmail
+
                 }
             });
         } catch (error) {
